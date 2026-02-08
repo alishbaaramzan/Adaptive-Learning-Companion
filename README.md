@@ -12,7 +12,7 @@ Complete product requirements document containing:
 - Tool & data inventory
 - Agent workflow example
 
-## 2. Architecture_Diagram.png
+## 2. architecture.png
 System architecture showing:
 
 - LangGraph agent states (7 steps)
