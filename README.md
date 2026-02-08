@@ -1,11 +1,11 @@
-## Adaptive-Learning-Companion
+# Adaptive-Learning-Companion
 
-# Project Overview
+## Project Overview
 An AI agent that helps students understand complex learning materials by adapting explanations to their knowledge level, generating practice problems, and tracking progress.
 
 **Why it's agentic**: Requires 5-7 sequential steps with conditional logic, tool orchestration, and multi-source data integration.
 
-# Deliverables
+## Deliverables
 
 1. PRD.md
 Complete product requirements document containing:
