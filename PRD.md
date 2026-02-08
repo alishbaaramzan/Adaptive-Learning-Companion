@@ -2,8 +2,6 @@
 
 ## Adaptive Learning Companion
 
----
-
 ## Problem Statement
 
 **What bottleneck are we solving?**
