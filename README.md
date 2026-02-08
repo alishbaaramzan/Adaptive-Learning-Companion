@@ -7,7 +7,7 @@ An AI agent that helps students understand complex learning materials by adaptin
 
 ## Deliverables
 
-1. PRD.md
+**1. PRD.md**:
 Complete product requirements document containing:
 - Problem statement
 - User personas
@@ -15,7 +15,7 @@ Complete product requirements document containing:
 - Tool & data inventory
 - Agent workflow example
 
-2. Architecture_Diagram.png
+**2. Architecture_Diagram.png**:
 System architecture showing:
 - LangGraph agent states (7 steps)
 - 4 Python tools
