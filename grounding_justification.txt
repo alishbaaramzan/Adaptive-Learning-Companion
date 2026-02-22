@@ -1,0 +1,60 @@
+Grounding Justification — Adaptive Learning Companion
+=======================================================
+
+Why does this agent specifically need the ingested course data
+instead of relying on the LLM's pre-trained knowledge?
+
+──────────────────────────────────────────────────────────────
+
+1. COURSE-SPECIFIC ACCURACY
+   The LLM was trained on general internet data, not on the exact
+   textbook, lecture notes, or lab materials used in this course.
+   Explanations must match the specific notation, terminology, and
+   examples the student sees in class. A student asking "explain
+   Lab 2 Task 3" needs an answer grounded in *their* lab sheet —
+   not a generic internet definition that uses different vocabulary
+   or covers a different curriculum.
+
+2. PREVENTING HALLUCINATION
+   LLMs confidently generate plausible-sounding but incorrect
+   information when asked about specific course content they were
+   not trained on. Grounding the agent in the vector database means
+   every explanation is traceable to a real source document and a
+   real page number — the agent cannot fabricate content it did not
+   retrieve.
+
+3. PERSONALISED DIFFICULTY MATCHING
+   The vector store's metadata (difficulty, content_type) allows the
+   agent to retrieve beginner vs. advanced explanations of the same
+   topic. The LLM's pre-trained brain has no concept of what "beginner"
+   means for *this specific course* — it would default to a one-size-
+   fits-all explanation that is often too abstract for struggling
+   students.
+
+4. PREREQUISITE MAPPING
+   The agent must know which topics must be understood before teaching
+   a new concept (e.g., "you must understand cell structure before
+   photosynthesis"). This dependency graph is encoded in the ingested
+   course materials. It is not something a general-purpose LLM can
+   infer reliably for a custom curriculum.
+
+5. PRACTICE PROBLEMS
+   The agent generates practice questions by retrieving real exercises
+   from the course material rather than inventing them. This ensures
+   problems are aligned with the actual exam style, marking scheme,
+   and difficulty progression — something the LLM cannot guarantee
+   on its own.
+
+6. UPDATABILITY
+   Course materials change every semester. The vector database can be
+   re-ingested with new PDFs without retraining the LLM. The agent
+   stays current with the latest curriculum simply by running
+   ingest_data.py again.
+
+──────────────────────────────────────────────────────────────
+Conclusion: The agent's value comes from combining the LLM's
+reasoning ability with precise, course-specific knowledge from
+the vector store. Without the ingested data, the agent is just
+a generic chatbot. With it, it becomes a tutor that knows exactly
+what this student needs to learn and can prove every explanation
+with a source.
