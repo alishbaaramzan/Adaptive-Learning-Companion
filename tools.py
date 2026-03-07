@@ -21,7 +21,7 @@ from typing import Literal
 
 import chromadb
 import openai
-from chromadb.config import Settings
+#from chromadb.config import Settings
 from dotenv import load_dotenv
 from langchain_core.tools import tool
 from pydantic import BaseModel, Field
@@ -33,13 +33,17 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # SHARED: ChromaDB client (re-used across calls)
 # ─────────────────────────────────────────────────────────
 
+'''
 def _get_collection(collection_name: str = "learning_companion_kb"):
     client = chromadb.PersistentClient(
         path="./chroma_db",
         settings=Settings(anonymized_telemetry=False)
     )
     return client.get_or_create_collection(name=collection_name)
-
+'''
+def _get_collection(collection_name: str = "learning_companion_kb"):
+    client = chromadb.PersistentClient(path="./chroma_db")
+    return client.get_or_create_collection(name=collection_name)
 
 def _embed(text: str) -> list[float]:
     """Generate a single embedding via OpenAI for querying ChromaDB."""

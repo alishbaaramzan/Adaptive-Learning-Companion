@@ -9,8 +9,6 @@ Implements a ReAct (Reason + Act) loop using LangGraph:
 
 State flows:  START → agent → [tools → agent]* → END
 
-Install:
-    pip install langgraph langchain langchain-openai langchain-core openai python-dotenv
 """
 
 import os
@@ -35,7 +33,7 @@ load_dotenv()
 class AgentState(TypedDict):
     """
     Shared state passed between every node in the graph.
-
+    
     `messages` uses the `add_messages` reducer so each node
     appends to the history rather than overwriting it.
     This gives the LLM full conversation + tool-call context.

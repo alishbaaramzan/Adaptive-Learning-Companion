@@ -1,0 +1,307 @@
+07:16:37 | INFO     | =======================================================
+07:16:37 | INFO     |   MULTI-AGENT SESSION STARTED
+07:16:37 | INFO     |   Researcher: retrieve_content, get_student_progress
+07:16:37 | INFO     |   Analyst   : update_student_progress
+07:16:37 | INFO     | =======================================================
+07:16:56 | INFO     | Student ID: 2022671
+07:17:05 | INFO     | [USER] [Student ID: 2022671] What is agentic ai
+07:17:05 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:17:05 | INFO     | [RESEARCHER] Processing 1 messages in history
+07:17:07 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'agentic_ai'})
+07:17:07 | INFO     | [ROUTER] Researcher has tool calls → researcher_tools
+07:17:07 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:17:07 | INFO     | [RESEARCHER] Processing 3 messages in history
+07:17:09 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_ai', 'content_type': 'practice', 'difficulty': 'advanced'})
+07:17:09 | INFO     | [ROUTER] Researcher has tool calls → researcher_tools
+07:17:15 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:17:15 | INFO     | [RESEARCHER] Processing 5 messages in history
+07:17:19 | INFO     | [RESEARCHER] → Response: It looks like you have a strong understanding of agentic AI, as your mastery score is 1.0. Let's explore an advanced pra...
+07:17:19 | INFO     | [ROUTER] No tool calls, no handoff signal → END
+07:18:21 | INFO     | [USER] [Student ID: 2022671] i want mcq for practice
+07:18:21 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:18:21 | INFO     | [RESEARCHER] Processing 7 messages in history
+07:18:24 | INFO     | [RESEARCHER] → Response: Let's create a multiple-choice question based on agentic AI for your practice:  **Multiple-Choice Question:**  Which of ...
+07:18:24 | INFO     | [ROUTER] No tool calls, no handoff signal → END
+07:18:43 | INFO     | [USER] [Student ID: 2022671] B
+07:18:43 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:18:43 | INFO     | [RESEARCHER] Processing 9 messages in history
+07:18:46 | INFO     | [RESEARCHER] → Response: Great choice! Option B is indeed the correct answer. Agentic AI is designed to act autonomously to achieve specific goal...
+07:18:46 | INFO     | [RESEARCHER] ✓ Handoff signal detected — transitioning to Analyst
+07:18:46 | INFO     | [ROUTER] Handoff signal found → transitioning to ANALYST
+07:18:46 | INFO     | ━━━ ANALYST NODE ACTIVATED ━━━
+07:18:46 | INFO     | [ANALYST] Received handoff — processing evaluation
+07:18:49 | INFO     | [ANALYST] → Response: It seems I mistakenly prepared a handoff package for the Analyst, but since you're already proficient in this topic, the...
+07:18:49 | INFO     | [ANALYST] ✓ Session complete signal — routing to END
+07:18:49 | INFO     | [ROUTER] SESSION_COMPLETE signal → END
+07:19:12 | INFO     | Session ended by user.
+07:38:07 | INFO     | =======================================================
+07:38:07 | INFO     |   MULTI-AGENT SESSION STARTED  (v2)
+07:38:07 | INFO     |   Researcher : retrieve_content, get_student_progress
+07:38:07 | INFO     |   Analyst    : update_student_progress
+07:38:07 | INFO     |   Memory     : WINDOW_SIZE=12 + rolling summary
+07:38:07 | INFO     | =======================================================
+07:38:13 | INFO     | Student ID: 2022671
+07:38:33 | INFO     | [USER] [Student ID: 2022671] what is persistent memory in agentic systems
+07:38:33 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:38:33 | INFO     | [RESEARCHER] Window=1 msgs | Summary=False
+07:38:37 | INFO     | [RESEARCHER] → Response: Hello! Let's start by exploring your understanding of persistent memory in agentic systems. Can you briefly describe wha...
+07:38:37 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:38:37 | INFO     | [MEMORY] Live messages: 2 | Summary lines: 0
+07:39:08 | INFO     | [USER] [Student ID: 2022671] i think it means saving the work somwehere so that it can be retrieved later
+07:39:08 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:08 | INFO     | [RESEARCHER] Window=3 msgs | Summary=False
+07:39:10 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'agentic_systems'})
+07:39:10 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:39:10 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:10 | INFO     | [RESEARCHER] Window=5 msgs | Summary=False
+07:39:12 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'prerequisites', 'difficulty': 'beginner'})
+07:39:12 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:39:14 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:14 | INFO     | [RESEARCHER] Window=7 msgs | Summary=False
+07:39:16 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:39:16 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:39:16 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:16 | INFO     | [RESEARCHER] Window=9 msgs | Summary=False
+07:39:18 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:39:18 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:39:18 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:18 | INFO     | [RESEARCHER] Window=11 msgs | Summary=False
+07:39:20 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:39:20 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:39:23 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:23 | INFO     | [MEMORY] Evicted 1 messages → window=12, summary_lines=1
+07:39:23 | INFO     | [RESEARCHER] Window=12 msgs | Summary=True
+07:39:24 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:39:24 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:39:24 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:24 | INFO     | [MEMORY] Evicted 3 messages → window=12, summary_lines=4
+07:39:24 | INFO     | [RESEARCHER] Window=12 msgs | Summary=True
+07:39:26 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:39:26 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:39:26 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:26 | INFO     | [MEMORY] Evicted 5 messages → window=12, summary_lines=9
+07:39:26 | INFO     | [RESEARCHER] Window=12 msgs | Summary=True
+07:39:28 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'practice', 'difficulty': 'beginner'})
+07:39:28 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:39:28 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:39:28 | INFO     | [MEMORY] Evicted 7 messages → window=12, summary_lines=16
+07:39:28 | INFO     | [RESEARCHER] Window=12 msgs | Summary=True
+07:39:30 | INFO     | [RESEARCHER] → Response: Hello! Let's start by exploring your understanding of persistent memory in agentic systems. Could you share what you thi...
+07:39:30 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:39:30 | INFO     | [MEMORY] Live messages: 20 | Summary lines: 16
+07:43:39 | INFO     | Session ended by user.
+07:43:45 | INFO     | =======================================================
+07:43:45 | INFO     |   MULTI-AGENT SESSION STARTED  (v3)
+07:43:45 | INFO     |   Researcher : retrieve_content, get_student_progress
+07:43:45 | INFO     |   Analyst    : update_student_progress
+07:43:45 | INFO     |   Memory     : WINDOW_SIZE=12 + rolling summary
+07:43:45 | INFO     | =======================================================
+07:43:48 | INFO     | Student ID: 2022671
+07:43:56 | INFO     | [USER] [Student ID: 2022671] what is persistent memory in agentic systems
+07:43:56 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:43:56 | INFO     | [RESEARCHER] Window=1 msgs | Summary=False | ToolCalls=0/6
+07:43:58 | INFO     | [RESEARCHER] → Response: Hello! Let's start by exploring your understanding of persistent memory in agentic systems. Could you briefly describe w...
+07:43:58 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:43:58 | INFO     | [MEMORY] Live messages: 2 | Summary lines: 0
+07:44:27 | INFO     | [USER] [Student ID: 2022671] I think it means storing data somewhere so that it can be retrieved later on
+07:44:27 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:44:27 | INFO     | [RESEARCHER] Window=3 msgs | Summary=False | ToolCalls=0/6
+07:44:29 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'agentic_systems'})
+07:44:29 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:44:29 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:44:29 | INFO     | [RESEARCHER] Window=5 msgs | Summary=False | ToolCalls=1/6
+07:44:30 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'prerequisites', 'difficulty': 'beginner'})
+07:44:30 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:44:30 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_systems', 'content_type': 'practice', 'difficulty': 'beginner'})
+07:44:30 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:49:46 | INFO     | =======================================================
+07:49:46 | INFO     |   MULTI-AGENT SESSION STARTED  (v3)
+07:49:46 | INFO     |   Researcher : retrieve_content, get_student_progress
+07:49:46 | INFO     |   Analyst    : update_student_progress
+07:49:46 | INFO     |   Memory     : WINDOW_SIZE=12 + rolling summary
+07:49:46 | INFO     | =======================================================
+07:49:49 | INFO     | Student ID: 2022671
+07:50:08 | INFO     | [USER] [Student ID: 2022671] what is retrieval augmented generation
+07:50:08 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:50:08 | INFO     | [RESEARCHER] Window=1 msgs | Summary=False | ToolCalls=0/6
+07:50:09 | INFO     | [RESEARCHER] → Response: Hello! Let's start by exploring what you know about retrieval augmented generation. Can you briefly explain what you thi...
+07:50:09 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:50:09 | INFO     | [MEMORY] Live messages: 2 | Summary lines: 0
+07:50:22 | INFO     | [USER] [Student ID: 2022671] i do not know what it means
+07:50:22 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:50:22 | INFO     | [RESEARCHER] Window=3 msgs | Summary=False | ToolCalls=0/6
+07:50:23 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'retrieval_augmented_generation'})
+07:50:23 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:50:23 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:50:23 | INFO     | [RESEARCHER] Window=5 msgs | Summary=False | ToolCalls=1/6
+07:50:25 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'retrieval_augmented_generation', 'content_type': 'prerequisites', 'difficulty': 'beginner'})
+07:50:25 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'retrieval_augmented_generation', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:50:25 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'retrieval_augmented_generation', 'content_type': 'practice', 'difficulty': 'beginner'})
+07:50:25 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:51:21 | INFO     | =======================================================
+07:51:21 | INFO     |   MULTI-AGENT SESSION STARTED  (v3)
+07:51:21 | INFO     |   Researcher : retrieve_content, get_student_progress
+07:51:21 | INFO     |   Analyst    : update_student_progress
+07:51:21 | INFO     |   Memory     : WINDOW_SIZE=12 + rolling summary
+07:51:21 | INFO     | =======================================================
+07:51:25 | INFO     | Student ID: 2022671
+07:51:32 | INFO     | [USER] [Student ID: 2022671] what is RAG
+07:51:32 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:51:32 | INFO     | [RESEARCHER] Window=1 msgs | Summary=False | ToolCalls=0/6
+07:51:35 | INFO     | [RESEARCHER] → Response: Hello! It's great to see your curiosity. Could you please tell me what you know about RAG so far?...
+07:51:35 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:51:35 | INFO     | [MEMORY] Live messages: 2 | Summary lines: 0
+07:51:43 | INFO     | [USER] [Student ID: 2022671] i do not know what it is
+07:51:43 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:51:43 | INFO     | [RESEARCHER] Window=3 msgs | Summary=False | ToolCalls=0/6
+07:51:44 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'RAG'})
+07:51:44 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:51:44 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:51:44 | INFO     | [RESEARCHER] Window=5 msgs | Summary=False | ToolCalls=1/6
+07:51:47 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'RAG', 'content_type': 'prerequisites', 'difficulty': 'beginner'})
+07:51:47 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'RAG', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:51:47 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'RAG', 'content_type': 'practice', 'difficulty': 'beginner'})
+07:51:47 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:53:49 | INFO     | =======================================================
+07:53:49 | INFO     |   MULTI-AGENT SESSION STARTED  (v3)
+07:53:49 | INFO     |   Researcher : retrieve_content, get_student_progress
+07:53:49 | INFO     |   Analyst    : update_student_progress
+07:53:49 | INFO     |   Memory     : WINDOW_SIZE=12 + rolling summary
+07:53:49 | INFO     | =======================================================
+07:53:52 | INFO     | Student ID: 2022671
+07:53:56 | INFO     | [USER] [Student ID: 2022671] what is RAG
+07:53:56 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:53:56 | INFO     | [RESEARCHER] Window=1 msgs | Summary=False | ToolCalls=0/6
+07:53:59 | INFO     | [RESEARCHER] → Response: Hello! Let's start by understanding what you know about RAG. Can you tell me what RAG stands for in the context of techn...
+07:53:59 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:53:59 | INFO     | [MEMORY] Live messages: 2 | Summary lines: 0
+07:54:14 | INFO     | [USER] [Student ID: 2022671] i do not know what is it
+07:54:14 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:54:14 | INFO     | [RESEARCHER] Window=3 msgs | Summary=False | ToolCalls=0/6
+07:54:15 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'RAG'})
+07:54:15 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:54:15 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:54:15 | INFO     | [RESEARCHER] Window=5 msgs | Summary=False | ToolCalls=1/6
+07:54:16 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'RAG', 'content_type': 'prerequisites', 'difficulty': 'beginner'})
+07:54:16 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'RAG', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:54:16 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'RAG', 'content_type': 'practice', 'difficulty': 'beginner'})
+07:54:16 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:57:08 | INFO     | =======================================================
+07:57:08 | INFO     |   MULTI-AGENT SESSION STARTED  (v3)
+07:57:08 | INFO     |   Researcher : retrieve_content, get_student_progress
+07:57:08 | INFO     |   Analyst    : update_student_progress
+07:57:08 | INFO     |   Memory     : WINDOW_SIZE=12 + rolling summary
+07:57:08 | INFO     | =======================================================
+07:57:13 | INFO     | Student ID: 2022671
+07:57:19 | INFO     | [USER] [Student ID: 2022671] what is RAG
+07:57:19 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:57:19 | INFO     | [RESEARCHER] Window=1 msgs | Summary=False | ToolCalls=0/6
+07:57:21 | INFO     | [RESEARCHER] → Response: Hello! Let's start by understanding what you know about Retrieval-Augmented Generation (RAG). Could you briefly explain ...
+07:57:21 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:57:21 | INFO     | [MEMORY] Live messages: 2 | Summary lines: 0
+07:57:28 | INFO     | [USER] [Student ID: 2022671] i do not know what it is
+07:57:28 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:57:28 | INFO     | [RESEARCHER] Window=3 msgs | Summary=False | ToolCalls=0/6
+07:57:29 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'retrieval_augmented_generation'})
+07:57:29 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:57:29 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:57:29 | INFO     | [RESEARCHER] Window=5 msgs | Summary=False | ToolCalls=1/6
+07:57:31 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'retrieval_augmented_generation', 'content_type': 'prerequisites', 'difficulty': 'beginner'})
+07:57:31 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'retrieval_augmented_generation', 'content_type': 'explanation', 'difficulty': 'beginner'})
+07:57:31 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'retrieval_augmented_generation', 'content_type': 'practice', 'difficulty': 'beginner'})
+07:57:31 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+07:57:32 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:57:32 | INFO     | [RESEARCHER] Window=9 msgs | Summary=False | ToolCalls=4/6
+07:57:38 | INFO     | [RESEARCHER] → Response: Let's dive into the concept of Retrieval-Augmented Generation (RAG). Here's a brief explanation based on the content I'v...
+07:57:38 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:57:38 | INFO     | [MEMORY] Live messages: 10 | Summary lines: 0
+07:57:52 | INFO     | [USER] [Student ID: 2022671] i want mcq
+07:57:52 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:57:52 | INFO     | [RESEARCHER] Window=11 msgs | Summary=False | ToolCalls=4/6
+07:57:54 | INFO     | [RESEARCHER] → Response: Sure, let's convert the practice problem into a multiple-choice question (MCQ):  **MCQ:** What is the primary advantage ...
+07:57:54 | INFO     | [ROUTER] No tool calls / no handoff → END
+07:57:54 | INFO     | [MEMORY] Live messages: 12 | Summary lines: 0
+07:58:07 | INFO     | [USER] [Student ID: 2022671] B
+07:58:07 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+07:58:07 | INFO     | [MEMORY] Evicted 1 msgs → window=12, summary_lines=1
+07:58:07 | INFO     | [RESEARCHER] Window=12 msgs | Summary=True | ToolCalls=4/6
+07:58:10 | INFO     | [RESEARCHER] → Response: ---HANDOFF_TO_ANALYST--- Student ID: 2022671 Topic: retrieval_augmented_generation Current Mastery: 0.0 Difficulty: begi...
+07:58:10 | INFO     | [RESEARCHER] ✓ Handoff signal — transitioning to Analyst
+07:58:10 | INFO     | [ROUTER] Handoff signal → ANALYST
+07:58:10 | INFO     | ━━━ ANALYST NODE ACTIVATED ━━━
+07:58:10 | INFO     | [ANALYST] ✓ Handoff package extracted successfully
+07:58:15 | INFO     | [ANALYST] → Response: ### STEP 1 — PARSE  - **Student ID:** 2022671 - **Topic:** retrieval_augmented_generation - **Current Mastery:** 0.0 - *...
+07:58:15 | INFO     | [ANALYST] ✓ SESSION_COMPLETE signal → END
+07:58:15 | INFO     | [ROUTER] SESSION_COMPLETE → END
+07:58:15 | INFO     | [MEMORY] Live messages: 15 | Summary lines: 1
+07:58:55 | INFO     | Session ended by user.
+12:49:22 | INFO     | =======================================================
+12:49:22 | INFO     |   MULTI-AGENT SESSION STARTED  (v3)
+12:49:22 | INFO     |   Researcher : retrieve_content, get_student_progress
+12:49:22 | INFO     |   Analyst    : update_student_progress
+12:49:22 | INFO     |   Memory     : WINDOW_SIZE=12 + rolling summary
+12:49:22 | INFO     | =======================================================
+12:49:31 | INFO     | Student ID: 2022671
+12:49:48 | INFO     | [USER] [Student ID: 2022671] how do we ensure safety for llms
+12:49:48 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:49:48 | INFO     | [RESEARCHER] Window=1 msgs | Summary=False | ToolCalls=0/6
+12:49:50 | INFO     | [RESEARCHER] → Response: Hello! Ensuring the safety of large language models (LLMs) is a crucial topic. To get started, could you briefly tell me...
+12:49:50 | INFO     | [ROUTER] No tool calls / no handoff → END
+12:49:50 | INFO     | [MEMORY] Live messages: 2 | Summary lines: 0
+12:49:59 | INFO     | [USER] [Student ID: 2022671] I do not know anything
+12:49:59 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:49:59 | INFO     | [RESEARCHER] Window=3 msgs | Summary=False | ToolCalls=0/6
+12:50:01 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'llm_safety'})
+12:50:01 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+12:50:01 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:50:01 | INFO     | [RESEARCHER] Window=5 msgs | Summary=False | ToolCalls=1/6
+12:50:03 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'llm_safety', 'content_type': 'prerequisites', 'difficulty': 'beginner'})
+12:50:03 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'llm_safety', 'content_type': 'explanation', 'difficulty': 'beginner'})
+12:50:03 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'llm_safety', 'content_type': 'practice', 'difficulty': 'beginner'})
+12:50:03 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+12:52:03 | INFO     | =======================================================
+12:52:03 | INFO     |   MULTI-AGENT SESSION STARTED  (v3)
+12:52:03 | INFO     |   Researcher : retrieve_content, get_student_progress
+12:52:03 | INFO     |   Analyst    : update_student_progress
+12:52:03 | INFO     |   Memory     : WINDOW_SIZE=12 + rolling summary
+12:52:03 | INFO     | =======================================================
+12:52:06 | INFO     | Student ID: 2022671
+12:52:10 | INFO     | [USER] [Student ID: 2022671] what is agentic ai
+12:52:10 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:52:10 | INFO     | [RESEARCHER] Window=1 msgs | Summary=False | ToolCalls=0/6
+12:52:12 | INFO     | [RESEARCHER] → Response: Hello! Let's start by exploring what you know about agentic AI. Could you briefly describe what you think agentic AI is?...
+12:52:12 | INFO     | [ROUTER] No tool calls / no handoff → END
+12:52:12 | INFO     | [MEMORY] Live messages: 2 | Summary lines: 0
+12:52:16 | INFO     | [USER] [Student ID: 2022671] i do not know
+12:52:16 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:52:16 | INFO     | [RESEARCHER] Window=3 msgs | Summary=False | ToolCalls=0/6
+12:52:17 | INFO     | [RESEARCHER] → Tool call: get_student_progress({'student_id': '2022671', 'topic': 'agentic_ai'})
+12:52:17 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+12:52:17 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:52:17 | INFO     | [RESEARCHER] Window=5 msgs | Summary=False | ToolCalls=1/6
+12:52:19 | INFO     | [RESEARCHER] → Tool call: retrieve_content({'topic': 'agentic_ai', 'content_type': 'practice', 'difficulty': 'advanced'})
+12:52:19 | INFO     | [ROUTER] Researcher tool calls → researcher_tools
+12:52:20 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:52:20 | INFO     | [RESEARCHER] Window=7 msgs | Summary=False | ToolCalls=2/6
+12:52:22 | INFO     | [RESEARCHER] → Response: Great! Let's dive into a practice problem to test your understanding of Agentic AI. Here's a scenario for you:  **Practi...
+12:52:22 | INFO     | [ROUTER] No tool calls / no handoff → END
+12:52:22 | INFO     | [MEMORY] Live messages: 8 | Summary lines: 0
+12:53:31 | INFO     | [USER] [Student ID: 2022671] i want mcq
+12:53:31 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:53:31 | INFO     | [RESEARCHER] Window=9 msgs | Summary=False | ToolCalls=2/6
+12:53:33 | INFO     | [RESEARCHER] → Response: Certainly! Here's a multiple-choice question based on the practice problem:  **Question:** How might an Agentic AI syste...
+12:53:33 | INFO     | [ROUTER] No tool calls / no handoff → END
+12:53:33 | INFO     | [MEMORY] Live messages: 10 | Summary lines: 0
+12:53:51 | INFO     | [USER] [Student ID: 2022671] B
+12:53:51 | INFO     | ━━━ RESEARCHER NODE ACTIVATED ━━━
+12:53:51 | INFO     | [RESEARCHER] Window=11 msgs | Summary=False | ToolCalls=2/6
+12:53:54 | INFO     | [RESEARCHER] → Response: ---HANDOFF_TO_ANALYST--- Student ID: 2022671 Topic: agentic_ai Current Mastery: 1.00 Difficulty: advanced Student Answer...
+12:53:54 | INFO     | [RESEARCHER] ✓ Handoff signal — transitioning to Analyst
+12:53:54 | INFO     | [ROUTER] Handoff signal → ANALYST
+12:53:54 | INFO     | ━━━ ANALYST NODE ACTIVATED ━━━
+12:53:54 | INFO     | [ANALYST] ✓ Handoff package extracted successfully
+12:53:57 | INFO     | [ANALYST] → Response: STEP 1 — PARSE  - **Student ID**: 2022671 - **Topic**: agentic_ai - **Current Mastery**: 1.00 - **Difficulty**: advanced...
+12:53:57 | INFO     | [ANALYST] ✓ SESSION_COMPLETE signal → END
+12:53:57 | INFO     | [ROUTER] SESSION_COMPLETE → END
+12:53:57 | INFO     | [MEMORY] Live messages: 13 | Summary lines: 0
+12:54:25 | INFO     | Session ended by user.
