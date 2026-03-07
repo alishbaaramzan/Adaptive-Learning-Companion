@@ -147,7 +147,7 @@ def trim_messages(state: MultiAgentState) -> tuple[list[BaseMessage], str]:
 
     Returns (trimmed_window, updated_summary).
 
-    BUG FIX v3: the caller (researcher_node) must write `trimmed_window` back
+    The caller (researcher_node) must write `trimmed_window` back
     into state["messages"] so the state list itself is bounded, not just the
     prompt sent to the LLM.  Previously only the prompt was trimmed while
     state["messages"] kept growing without limit via add_messages.
@@ -218,7 +218,6 @@ def researcher_node(state: MultiAgentState) -> dict:
     """
     Agent A — Researcher.
 
-    v3 fixes:
       • Writes trimmed window back into state["messages"] so the list is
         genuinely bounded (not just the LLM prompt).
       • Injects a "DO NOT REPEAT" reminder listing already-called tools so
@@ -291,14 +290,11 @@ def analyst_node(state: MultiAgentState) -> dict:
     """
     Agent B — Analyst.
 
-    KEY FIX: Instead of passing the full noisy conversation, we:
+    Instead of passing the full noisy conversation:
       1. Extract the handoff package from wherever it sits in history.
       2. Build a clean, isolated activation message containing only the
          handoff block + a clear instruction to evaluate.
       3. Send ONLY [system_prompt, activation_message] to the LLM.
-
-    This eliminates the "already proficient / no update needed" deflection
-    that occurred when the Analyst was confused by irrelevant tool messages.
     """
     logger.info("━━━ ANALYST NODE ACTIVATED ━━━")
 

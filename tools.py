@@ -34,16 +34,23 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # ─────────────────────────────────────────────────────────
 
 '''
-def _get_collection(collection_name: str = "learning_companion_kb"):
-    client = chromadb.PersistentClient(
-        path="./chroma_db",
-        settings=Settings(anonymized_telemetry=False)
-    )
-    return client.get_or_create_collection(name=collection_name)
-'''
+
 def _get_collection(collection_name: str = "learning_companion_kb"):
     client = chromadb.PersistentClient(path="./chroma_db")
     return client.get_or_create_collection(name=collection_name)
+ '''
+# Initialize ChromaDB once at import time — avoids tenant-not-found error
+# when the module is loaded fresh (e.g. running multi_agent_graph.py directly)
+_chroma_client = chromadb.PersistentClient(path="./chroma_db")
+_chroma_collection = _chroma_client.get_or_create_collection(
+    name="learning_companion_kb"
+)
+
+def _get_collection(collection_name: str = "learning_companion_kb"):
+    if collection_name == "learning_companion_kb":
+        return _chroma_collection
+    # Fallback for any other collection name
+    return _chroma_client.get_or_create_collection(name=collection_name)
 
 def _embed(text: str) -> list[float]:
     """Generate a single embedding via OpenAI for querying ChromaDB."""
