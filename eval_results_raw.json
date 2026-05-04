@@ -1,0 +1,44 @@
+[
+  {
+    "id": "TC-001",
+    "ragas": {
+      "faithfulness": 0.0,
+      "answer_relevancy": NaN,
+      "context_recall": 0.0,
+      "context_precision": 0.0,
+      "answer_correctness": NaN
+    },
+    "deepeval": {
+      "relevancy": 0.75,
+      "faithfulness": 1.0
+    }
+  },
+  {
+    "id": "TC-002",
+    "ragas": {
+      "faithfulness": 0.5,
+      "answer_relevancy": NaN,
+      "context_recall": 0.0,
+      "context_precision": 0.0,
+      "answer_correctness": NaN
+    },
+    "deepeval": {
+      "relevancy": 0.5,
+      "faithfulness": 1.0
+    }
+  },
+  {
+    "id": "TC-003",
+    "ragas": {
+      "faithfulness": 0.235,
+      "answer_relevancy": NaN,
+      "context_recall": 0.0,
+      "context_precision": 0.0,
+      "answer_correctness": NaN
+    },
+    "deepeval": {
+      "relevancy": 1.0,
+      "faithfulness": 1.0
+    }
+  }
+]

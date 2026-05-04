@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adaptive Learning Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0d0f14;
+    --surface:  #13161e;
+    --card:     #1a1e2a;
+    --border:   #252a38;
+    --accent:   #5b8cff;
+    --accent2:  #a78bfa;
+    --success:  #34d399;
+    --warn:     #fbbf24;
+    --danger:   #f87171;
+    --text:     #e8eaf0;
+    --muted:    #6b7280;
+    --researcher: #5b8cff;
+    --analyst:    #a78bfa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 1fr;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    gap: 20px;
+    overflow-y: auto;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: .04em;
+    color: var(--text);
+    padding: 0 8px 16px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .logo span { color: var(--accent); }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px;
+  }
+
+  .field-group { display: flex; flex-direction: column; gap: 8px; }
+
+  label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .06em;
+    padding: 0 4px;
+  }
+
+  input, select {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color .2s;
+    width: 100%;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+
+  .btn {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .06em;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+    text-transform: uppercase;
+  }
+  .btn:hover { opacity: .85; }
+  .btn:active { transform: scale(.97); }
+  .btn-primary   { background: var(--accent); color: #fff; }
+  .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+  .btn-success   { background: var(--success); color: #0d0f14; }
+  .btn-danger    { background: var(--danger); color: #fff; }
+  .btn-warn      { background: var(--warn); color: #0d0f14; }
+  .btn-full      { width: 100%; }
+
+  .mode-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .mode-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 8px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+  }
+  .mode-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+  }
+  .dot.online  { background: var(--success); box-shadow: 0 0 6px var(--success); }
+  .dot.working { background: var(--warn); animation: pulse 1s infinite; }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: .4; }
+  }
+
+  .agent-indicator {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .agent-indicator.researcher {
+    background: rgba(91,140,255,.1);
+    border-color: rgba(91,140,255,.3);
+    color: var(--researcher);
+  }
+  .agent-indicator.analyst {
+    background: rgba(167,139,250,.1);
+    border-color: rgba(167,139,250,.3);
+    color: var(--analyst);
+  }
+
+  /* HITL panel */
+  .hitl-panel {
+    background: rgba(251,191,36,.06);
+    border: 1px solid rgba(251,191,36,.3);
+    border-radius: 10px;
+    padding: 14px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .hitl-panel.visible { display: flex; }
+  .hitl-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--warn);
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  .hitl-score-row { display: flex; gap: 6px; align-items: center; }
+  .hitl-score-row input { flex: 1; }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 12px 8px 0;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── MAIN CHAT AREA ── */
+  .main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-header {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .chat-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .thread-pill {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+  }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .msg {
+    max-width: 76%;
+    animation: msgIn .25s ease;
+  }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg.user { align-self: flex-end; }
+  .msg.agent { align-self: flex-start; }
+
+  .msg-meta {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 5px;
+    letter-spacing: .04em;
+    padding: 0 4px;
+  }
+  .msg.user .msg-meta { text-align: right; }
+
+  .msg-bubble {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg.user .msg-bubble {
+    background: var(--accent);
+    color: #fff;
+    border-bottom-right-radius: 3px;
+  }
+  .msg.agent.researcher .msg-bubble {
+    background: var(--card);
+    border: 1px solid rgba(91,140,255,.25);
+    border-bottom-left-radius: 3px;
+  }
+  .msg.agent.analyst .msg-bubble {
+    background: var(--card);
+    border: 1px solid rgba(167,139,250,.25);
+    border-bottom-left-radius: 3px;
+  }
+  .msg.system .msg-bubble {
+    background: rgba(251,191,36,.08);
+    border: 1px solid rgba(251,191,36,.2);
+    color: var(--warn);
+    font-size: 12px;
+    align-self: center;
+    max-width: 90%;
+    text-align: center;
+  }
+  .msg.system { align-self: center; max-width: 90%; }
+  .msg.error .msg-bubble {
+    background: rgba(248,113,113,.08);
+    border: 1px solid rgba(248,113,113,.2);
+    color: var(--danger);
+  }
+  .msg.error { align-self: center; max-width: 90%; }
+
+  /* SSE event log inside a streaming bubble */
+  .stream-events {
+    font-size: 10px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 80px;
+    overflow-y: auto;
+  }
+  .stream-event { display: flex; gap: 6px; }
+  .se-tag {
+    color: var(--accent2);
+    flex-shrink: 0;
+  }
+
+  /* typing indicator */
+  .typing-indicator {
+    display: flex; gap: 4px; padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    border-bottom-left-radius: 3px;
+    width: fit-content;
+  }
+  .typing-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--muted);
+    animation: bounce .9s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: .15s; }
+  .typing-dot:nth-child(3) { animation-delay: .3s; }
+  @keyframes bounce {
+    0%,80%,100% { transform: translateY(0); }
+    40%         { transform: translateY(-5px); }
+  }
+
+  /* input bar */
+  .input-bar {
+    padding: 16px 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  .input-bar textarea {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 12px 14px;
+    resize: none;
+    outline: none;
+    transition: border-color .2s;
+    min-height: 46px;
+    max-height: 120px;
+    line-height: 1.5;
+  }
+  .input-bar textarea:focus { border-color: var(--accent); }
+  .input-bar textarea::placeholder { color: var(--muted); }
+
+  .send-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    width: 46px;
+    height: 46px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity .15s, transform .1s;
+    flex-shrink: 0;
+  }
+  .send-btn:hover { opacity: .85; }
+  .send-btn:active { transform: scale(.95); }
+  .send-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .send-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+  /* welcome screen */
+  .welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 16px;
+    color: var(--muted);
+    padding: 40px;
+    text-align: center;
+  }
+  .welcome-icon { font-size: 48px; }
+  .welcome h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text);
+  }
+  .welcome p { font-size: 12px; line-height: 1.7; max-width: 360px; }
+
+  code {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: .9em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="logo">Adaptive<br>Learning <span>Companion</span></div>
+
+  <div class="field-group">
+    <div class="section-label">Session</div>
+    <label>API Base URL</label>
+    <input id="apiUrl" value="http://localhost:8000" />
+    <label>Student ID</label>
+    <input id="studentId" value="student_001" />
+    <label>Thread ID</label>
+    <input id="threadId" placeholder="auto-generated" />
+    <button class="btn btn-secondary btn-full" onclick="newThread()">↺ New Thread</button>
+  </div>
+
+  <div class="field-group">
+    <div class="section-label">Mode</div>
+    <div class="mode-toggle">
+      <div class="mode-btn active" id="modeChat" onclick="setMode('chat')">Chat</div>
+      <div class="mode-btn"       id="modeStream" onclick="setMode('stream')">Stream</div>
+    </div>
+  </div>
+
+  <div class="field-group">
+    <div class="section-label">Status</div>
+    <div class="status-badge">
+      <div class="dot" id="statusDot"></div>
+      <span id="statusText">Not connected</span>
+    </div>
+    <div id="agentIndicator" style="display:none" class="agent-indicator researcher">
+      <span id="agentIcon">🔬</span>
+      <span id="agentLabel">Researcher</span>
+    </div>
+  </div>
+
+  <!-- HITL panel -->
+  <div class="hitl-panel" id="hitlPanel">
+    <div class="hitl-title">⚠ HITL Review Pending</div>
+    <div style="font-size:11px; color: var(--muted); line-height:1.6">
+      Analyst wants to commit score <strong id="hitlScore" style="color:var(--warn)">—</strong>
+      for thread <code id="hitlThread">—</code>
+    </div>
+    <div class="hitl-score-row">
+      <input id="editScoreInput" placeholder="Override score…" style="font-size:12px" />
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px">
+      <button class="btn btn-success" style="font-size:10px;padding:8px 4px" onclick="hitlAction('approve')">✓ Approve</button>
+      <button class="btn btn-warn"    style="font-size:10px;padding:8px 4px" onclick="hitlAction('edit')">✎ Edit</button>
+      <button class="btn btn-danger"  style="font-size:10px;padding:8px 4px" onclick="hitlAction('cancel')">✕ Cancel</button>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    Multi-Agent v4 · LangGraph<br>
+    FastAPI · Lab 8
+  </div>
+</aside>
+
+<!-- ═══ MAIN ════════════════════════════════════════════════ -->
+<main class="main">
+  <header class="chat-header">
+    <div class="chat-title">Chat Interface</div>
+    <div class="thread-pill" id="threadPill">No active thread</div>
+  </header>
+
+  <div class="messages" id="messages">
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon">🎓</div>
+      <h2>Ready to learn?</h2>
+      <p>Set your <strong>Student ID</strong> and <strong>Thread ID</strong> in the sidebar, then send a message. Use <code>Stream</code> mode to watch tokens arrive live.</p>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <textarea id="msgInput" placeholder="Ask a question or submit your answer…" rows="1"
+      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send">
+      <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</main>
+
+<script>
+  let mode = 'chat';
+  let busy = false;
+  let currentThreadId = '';
+  let hitlThreadId    = '';
+
+  // ── helpers ──────────────────────────────────────────────
+  function setMode(m) {
+    mode = m;
+    document.getElementById('modeChat').classList.toggle('active', m === 'chat');
+    document.getElementById('modeStream').classList.toggle('active', m === 'stream');
+  }
+
+  function newThread() {
+    const id = Math.random().toString(36).slice(2, 10);
+    document.getElementById('threadId').value = id;
+    currentThreadId = id;
+    document.getElementById('threadPill').textContent = 'Thread: ' + id;
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  function getConfig() {
+    const base      = document.getElementById('apiUrl').value.replace(/\/$/, '');
+    const studentId = document.getElementById('studentId').value || 'student_001';
+    let   threadId  = document.getElementById('threadId').value.trim();
+    if (!threadId) { newThread(); threadId = document.getElementById('threadId').value; }
+    currentThreadId = threadId;
+    document.getElementById('threadPill').textContent = 'Thread: ' + threadId;
+    return { base, studentId, threadId };
+  }
+
+  function setStatus(state, text) {
+    const dot = document.getElementById('statusDot');
+    dot.className = 'dot ' + (state === 'working' ? 'working' : state === 'online' ? 'online' : '');
+    document.getElementById('statusText').textContent = text;
+  }
+
+  function showAgent(agent) {
+    const el    = document.getElementById('agentIndicator');
+    const icon  = document.getElementById('agentIcon');
+    const label = document.getElementById('agentLabel');
+    if (!agent) { el.style.display = 'none'; return; }
+    el.style.display = 'flex';
+    el.className = 'agent-indicator ' + agent;
+    icon.textContent  = agent === 'analyst' ? '📊' : '🔬';
+    label.textContent = agent === 'analyst' ? 'Analyst' : 'Researcher';
+  }
+
+  // ── message rendering ────────────────────────────────────
+  function removeWelcome() {
+    const w = document.getElementById('welcome');
+    if (w) w.remove();
+  }
+
+  function addMsg(role, text, agent) {
+    removeWelcome();
+    const msgs = document.getElementById('messages');
+    const wrap = document.createElement('div');
+    wrap.className = `msg ${role} ${agent || ''}`;
+
+    const meta   = document.createElement('div');
+    meta.className = 'msg-meta';
+    const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    meta.textContent = role === 'user' ? `You · ${now}` :
+                       agent ? `${agent.charAt(0).toUpperCase()+agent.slice(1)} · ${now}` : now;
+
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.textContent = text;
+
+    wrap.appendChild(meta);
+    wrap.appendChild(bubble);
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+    return bubble;
+  }
+
+  function addSystem(text) {
+    removeWelcome();
+    const msgs = document.getElementById('messages');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg system';
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addTyping() {
+    removeWelcome();
+    const msgs = document.getElementById('messages');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg agent researcher';
+    wrap.id = 'typingIndicator';
+    const ind = document.createElement('div');
+    ind.className = 'typing-indicator';
+    ind.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    wrap.appendChild(ind);
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+    return wrap;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typingIndicator');
+    if (t) t.remove();
+  }
+
+  // ── SEND ─────────────────────────────────────────────────
+  async function sendMessage() {
+    if (busy) return;
+    const input = document.getElementById('msgInput');
+    const text  = input.value.trim();
+    if (!text) return;
+
+    const { base, studentId, threadId } = getConfig();
+    addMsg('user', text);
+    input.value = '';
+    input.style.height = 'auto';
+    setBusy(true);
+
+    mode === 'stream'
+      ? await sendStream(base, studentId, threadId, text)
+      : await sendChat(base, studentId, threadId, text);
+  }
+
+  function setBusy(b) {
+    busy = b;
+    document.getElementById('sendBtn').disabled = b;
+    document.getElementById('msgInput').disabled = b;
+    setStatus(b ? 'working' : 'online', b ? 'Processing…' : 'Ready');
+  }
+
+  // ── /chat (synchronous) ──────────────────────────────────
+  async function sendChat(base, studentId, threadId, message) {
+    const typing = addTyping();
+    try {
+      const res = await fetch(`${base}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, thread_id: threadId, student_id: studentId }),
+      });
+
+      removeTyping();
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: res.statusText }));
+        addMsg('agent', `Error ${res.status}: ${err.detail || res.statusText}`, 'error');
+        setBusy(false); return;
+      }
+
+      const data = await res.json();
+      const agent = data.status?.current_agent || 'researcher';
+      showAgent(agent);
+      addMsg('agent', data.answer, agent);
+
+      if (data.hitl_pending) {
+        showHitl(data.thread_id, data.status?.proposed_score);
+        addSystem(`⚠ HITL pause — proposed score: ${data.status?.proposed_score || '?'}. Use sidebar to approve / edit / cancel.`);
+      }
+    } catch (e) {
+      removeTyping();
+      addMsg('agent', 'Connection error: ' + e.message, 'error');
+    }
+    setBusy(false);
+  }
+
+  // ── /stream (SSE) ────────────────────────────────────────
+  async function sendStream(base, studentId, threadId, message) {
+    // Build a streaming bubble with live event log
+    removeWelcome();
+    const msgs = document.getElementById('messages');
+
+    const wrap = document.createElement('div');
+    wrap.className = 'msg agent researcher';
+
+    const meta = document.createElement('div');
+    meta.className = 'msg-meta';
+    meta.textContent = 'Researcher · streaming…';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.textContent = '';
+
+    const evLog = document.createElement('div');
+    evLog.className = 'stream-events';
+
+    bubble.appendChild(evLog);
+    wrap.appendChild(meta);
+    wrap.appendChild(bubble);
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+
+    let textContent = '';
+    let eventsShown = 0;
+
+    function addEvent(tag, detail) {
+      if (eventsShown >= 12) return;
+      const row = document.createElement('div');
+      row.className = 'stream-event';
+      row.innerHTML = `<span class="se-tag">[${tag}]</span><span>${detail}</span>`;
+      evLog.appendChild(row);
+      evLog.scrollTop = evLog.scrollHeight;
+      eventsShown++;
+    }
+
+    try {
+      const res = await fetch(`${base}/stream`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, thread_id: threadId, student_id: studentId }),
+      });
+
+      const reader  = res.body.getReader();
+      const decoder = new TextDecoder();
+      let   buffer  = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          let event;
+          try { event = JSON.parse(line.slice(6)); } catch { continue; }
+
+          switch (event.event) {
+            case 'node_start':
+              addEvent('node', `▶ ${event.node}`);
+              wrap.className = `msg agent ${event.node.includes('analyst') ? 'analyst' : 'researcher'}`;
+              break;
+            case 'node_end':
+              addEvent('node', `■ ${event.node}`);
+              break;
+            case 'tool_use':
+              addEvent('tool', `⚙ ${event.tool}`);
+              break;
+            case 'token':
+              // Insert token before the event log
+              if (!bubble._textNode) {
+                bubble._textNode = document.createTextNode('');
+                bubble.insertBefore(bubble._textNode, evLog);
+              }
+              textContent += event.token;
+              bubble._textNode.textContent = textContent;
+              msgs.scrollTop = msgs.scrollHeight;
+              break;
+            case 'hitl_pause':
+              addEvent('hitl', `⚠ score=${event.proposed_score}`);
+              showHitl(event.thread_id, event.proposed_score);
+              addSystem(`⚠ HITL pause — use sidebar to review.`);
+              break;
+            case 'done':
+              if (!textContent && event.answer) {
+                if (!bubble._textNode) {
+                  bubble._textNode = document.createTextNode('');
+                  bubble.insertBefore(bubble._textNode, evLog);
+                }
+                bubble._textNode.textContent = event.answer;
+              }
+              const ag = event.status?.current_agent || 'researcher';
+              showAgent(ag);
+              meta.textContent = `${ag.charAt(0).toUpperCase()+ag.slice(1)} · done`;
+              addEvent('done', '✓ complete');
+              break;
+            case 'error':
+              bubble._textNode = bubble._textNode || document.createTextNode('');
+              bubble.insertBefore(bubble._textNode, evLog);
+              bubble._textNode.textContent = 'Error: ' + event.detail;
+              bubble.style.borderColor = 'rgba(248,113,113,.4)';
+              break;
+          }
+        }
+      }
+    } catch (e) {
+      addMsg('agent', 'Stream error: ' + e.message, 'error');
+    }
+
+    setBusy(false);
+  }
+
+  // ── HITL ─────────────────────────────────────────────────
+  function showHitl(threadId, score) {
+    hitlThreadId = threadId;
+    document.getElementById('hitlScore').textContent  = score || '?';
+    document.getElementById('hitlThread').textContent = threadId;
+    document.getElementById('hitlPanel').classList.add('visible');
+  }
+
+  function hideHitl() {
+    document.getElementById('hitlPanel').classList.remove('visible');
+    document.getElementById('editScoreInput').value = '';
+    hitlThreadId = '';
+  }
+
+  async function hitlAction(action) {
+    if (!hitlThreadId) return;
+    const { base } = getConfig();
+    const newScore = document.getElementById('editScoreInput').value.trim();
+
+    if (action === 'edit' && !newScore) {
+      document.getElementById('editScoreInput').focus();
+      document.getElementById('editScoreInput').style.borderColor = 'var(--danger)';
+      return;
+    }
+
+    setStatus('working', 'Sending HITL decision…');
+
+    const body = { action };
+    if (action === 'edit') body.new_score = newScore;
+
+    try {
+      const res = await fetch(`${base}/hitl/${hitlThreadId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        addSystem(`HITL error: ${data.detail || res.statusText}`);
+      } else {
+        const label = { approve:'approved', cancel:'cancelled', edit:'edited' }[action];
+        addSystem(`HITL ${label} ✓`);
+        if (data.answer) addMsg('agent', data.answer, 'analyst');
+        showAgent(action === 'cancel' ? 'researcher' : 'analyst');
+      }
+    } catch(e) {
+      addSystem('HITL request failed: ' + e.message);
+    }
+
+    hideHitl();
+    setStatus('online', 'Ready');
+  }
+
+  // ── init ──────────────────────────────────────────────────
+  (async function init() {
+    newThread();
+    const { base } = getConfig();
+    try {
+      const res = await fetch(`${base}/health`);
+      if (res.ok) setStatus('online', 'Connected');
+      else        setStatus('', 'API error');
+    } catch {
+      setStatus('', 'API offline');
+    }
+  })();
+</script>
+</body>
+</html>

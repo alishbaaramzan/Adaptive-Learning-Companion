@@ -1,0 +1,46 @@
+# ── Secrets — MUST NEVER enter the image ─────────────────────────────────────
+.env
+*.env
+.env.*
+
+# ── Local databases — runtime data, not source ────────────────────────────────
+*.sqlite
+*.db
+checkpoint_db.sqlite
+checkpoint_data/
+vector_data/
+
+# ── Python caches and build artefacts ────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# ── IDE / OS noise ────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
+
+# ── Test artefacts and logs ───────────────────────────────────────────────────
+*.log
+collaboration_trace.log
+htmlcov/
+.coverage
+.pytest_cache/
+
+# ── Git ───────────────────────────────────────────────────────────────────────
+.git/
+.gitignore

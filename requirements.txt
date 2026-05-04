@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+langchain-openai
+langchain-core
+langgraph
+python-dotenv
+httpx
+langgraph-checkpoint-sqlite
+chromadb

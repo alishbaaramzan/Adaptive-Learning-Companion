@@ -1,0 +1,62 @@
+name: Quality Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  evaluate:
+    name: Run Evaluation Quality Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Start the full stack (agent + vectordb) using docker compose
+      - name: Start services
+        run: docker compose up --build -d
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      # 3. Wait for the agent API to be healthy before running evals
+      - name: Wait for agent to be ready
+        run: |
+          echo "Waiting for agent API..."
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8000/health; then
+              echo "Agent is up!"
+              break
+            fi
+            echo "Attempt $i/30 — waiting 5s..."
+            sleep 5
+          done
+
+      # 4. Install only what the eval script needs (lightweight)
+      - name: Install eval dependencies
+        run: pip install requests
+
+      # 5. Run the evaluation script
+      #    Secrets are injected from GitHub's secret store — never in code.
+      #    Exit code 1 automatically marks this step (and the job) as failed.
+      - name: Run quality gate evaluation
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          API_BASE_URL: http://localhost:8000
+        run: python run_eval.py --thresholds eval_thresholds.json
+
+      # 6. Always upload the results file so you can inspect scores even on failure
+      - name: Upload eval results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval_results.json
+
+      # 7. Tear down containers
+      - name: Stop services
+        if: always()
+        run: docker compose down

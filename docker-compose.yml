@@ -1,0 +1,60 @@
+services:
+
+  # ── Agent API ───────────────────────────────────────────────────────────────
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: learning_agent
+    ports:
+      - "8000:8000"
+
+    # ── Runtime secret injection (no secrets in the image) ───────────────────
+    # Set OPENAI_API_KEY in your shell before running docker compose up:
+    #   export OPENAI_API_KEY=sk-...
+    # Or put it in a .env file (kept on host only, never in the image):
+    #   echo "OPENAI_API_KEY=sk-..." > .env
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+    # ── Persistence volumes ──────────────────────────────────────────────────
+    volumes:
+      - checkpoint_data:/app/checkpoint_data
+      - vector_data:/app/vector_data
+
+    # ── Service discovery ────────────────────────────────────────────────────
+    # ChromaDB is reachable inside the network at http://vectordb:8000
+    depends_on:
+      - vectordb
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ── Vector / Checkpoint Data Store ──────────────────────────────────────────
+  vectordb:
+    image: chromadb/chroma:latest
+    container_name: learning_vectordb
+    ports:
+      - "8001:8000"
+
+    volumes:
+      - vector_data:/chroma/chroma
+
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+
+    restart: unless-stopped
+    # No healthcheck — ChromaDB starts reliably and the agent retries on connect.
+
+# ── Named Volumes ─────────────────────────────────────────────────────────────
+# Survive container restarts. Only removed with: docker compose down -v
+volumes:
+  checkpoint_data:
+  vector_data:

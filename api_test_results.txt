@@ -1,0 +1,92 @@
+
+# Health
+Request: curl http://localhost:8000/health
+Response:
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : {"status":"ok","graph_ready":true,"checkpoint_db":"checkpoint_db.sqlite"}
+RawContent        : HTTP/1.1 200 OK
+                    Content-Length: 73
+                    Content-Type: application/json
+                    Date: Mon, 27 Apr 2026 07:28:48 GMT
+                    Server: uvicorn
+                    
+                    {"status":"ok","graph_ready":true,"checkpoint_db":"checkpoint_db.sqlite"}
+Forms             : {}
+Headers           : {[Content-Length, 73], [Content-Type, application/json], [Date, Mon, 27 Apr 2026 07:28:48 GMT], 
+                    [Server, uvicorn]}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 73
+
+
+#chat
+Request: curl.exe -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "@body.json"
+Response:
+
+{"answer":"Hello! It's great to see your interest in AI. Before we dive in, could you please tell me what you already know about artificial intelligence?","thread_id":"0fa9cbc1","status":{"current_agent":"researcher","tool_call_count":0,"proposed_score":null},"hitl_pending":false}
+
+#Stream
+Request: curl.exe -X POST http://localhost:8000/stream -H "Content-Type: application/json" -H "Accept: text/event-stream" -d "@body.json" --no-buffer
+
+Reponse:
+data: {"event": "node_start", "node": "researcher"}
+
+data: {"event": "token", "token": "Hello"}
+
+data: {"event": "token", "token": "!"}
+
+data: {"event": "token", "token": " Before"}
+
+data: {"event": "token", "token": " we"}
+
+data: {"event": "token", "token": " dive"}
+
+data: {"event": "token", "token": " into"}
+
+data: {"event": "token", "token": " recursion"}
+
+data: {"event": "token", "token": ","}
+
+data: {"event": "token", "token": " could"}
+
+data: {"event": "token", "token": " you"}
+
+data: {"event": "token", "token": " please"}
+
+data: {"event": "token", "token": " tell"}
+
+data: {"event": "token", "token": " me"}
+
+data: {"event": "token", "token": " what"}
+
+data: {"event": "token", "token": " you"}
+
+data: {"event": "token", "token": " understand"}
+
+data: {"event": "token", "token": " about"}
+
+data: {"event": "token", "token": " recursion"}
+
+data: {"event": "token", "token": " or"}
+
+data: {"event": "token", "token": " if"}
+
+data: {"event": "token", "token": " you've"}
+
+data: {"event": "token", "token": " encountered"}
+
+data: {"event": "token", "token": " it"}
+
+data: {"event": "token", "token": " before"}
+
+data: {"event": "token", "token": "?"}
+
+data: {"event": "node_end", "node": "researcher"}
+
+data: {"event": "done", "answer": "Hello! Before we dive into recursion, could you please tell me what you understand about recursion or if you've encountered it before?", "thread_id": "02768685", "status": {"current_agent": "researcher", "tool_call_count": 0, "proposed_score": null}}
+
+PS D:\Capstone\Adaptive-Learning-Companion> 

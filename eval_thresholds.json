@@ -1,0 +1,16 @@
+{
+  "thresholds": {
+    "faithfulness": {
+      "min": 0.7,
+      "description": "Fraction of the agent answer that is grounded in retrieved context. Below 0.7 means the agent is likely hallucinating facts not present in the knowledge base."
+    },
+    "answer_relevancy": {
+      "min": 0.6,
+      "description": "How well the answer addresses the actual question. Below 0.6 means the agent is giving off-topic or incomplete responses."
+    }
+  },
+  "justification": {
+    "faithfulness_0.7": "Set at 0.7 because our RAG pipeline should ground most claims in retrieved documents. 10% higher (0.8) would cause false failures on complex multi-hop questions. 10% lower (0.6) would allow too much hallucination through.",
+    "answer_relevancy_0.6": "Set at 0.6 to allow some flexibility since the agent reformats answers for a tutoring context. 10% higher (0.7) would fail valid paraphrased answers. 10% lower (0.5) would allow clearly off-topic responses."
+  }
+}

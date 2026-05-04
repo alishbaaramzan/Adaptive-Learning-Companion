@@ -1,0 +1,243 @@
+{
+  "metadata": {
+    "project": "Adaptive Learning Companion — Multi-Agent LangGraph (v4)",
+    "created": "2026-04-13",
+    "version": "3.0",
+    "description": "Gold evaluation dataset for RAGAS/DeepEval scoring. All topics drawn from standard Agentic AI curriculum: ReAct, tool use, multi-agent systems, memory, LangGraph, HITL, RAG, planning, and agent evaluation. Covers retrieval queries, tool-call accuracy, multi-agent handoff flows, memory, and edge cases.",
+    "categories": {
+      "retrieval": "Queries that exercise the vector-store retrieve_content tool",
+      "tool_call": "Queries that require a specific tool with correct arguments",
+      "handoff": "Queries that trigger the Researcher → Analyst handoff pipeline",
+      "memory": "Queries that test rolling-summary / sliding-window memory",
+      "edge_case": "Boundary and robustness scenarios"
+    }
+  },
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "category": "retrieval",
+      "user_query": "Explain the difference between LLM and Agentic AI",
+      "expected_ground_truth": "Agents are more than LLMs. While LLMs are powerful tools for processing and generating human-like text, agents are goal-driven systems capable of performing actions autonomously in a dynamic environment.   ",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "agentic_ai", "content_type": "explanation", "difficulty": "beginner"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Core agentic AI concept — tests basic retrieval of the difference between LLM and Agentic AI."
+    },
+    {
+      "id": "TC-002",
+      "category": "tool_call",
+      "user_query": "[Student ID: student_042] What is my current progress score in agentic_ai_fundamentals?",
+      "expected_ground_truth": "The system retrieves student_042's progress record and reports the current agentic_ai_fundamentals score as stored in the database.",
+      "expected_tool_calls": [
+        {"tool": "get_student_progress", "args": {"student_id": "student_042", "topic": "agentic_ai_fundamentals"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Verifies correct student_id extraction and tool argument binding."
+    },
+    {
+      "id": "TC-003",
+      "category": "retrieval",
+      "user_query": "What is Retrieval-Augmented Generation and why do agentic systems use it?",
+      "expected_ground_truth": "Retrieval-Augmented Generation (RAG) augments an LLM's response by first retrieving relevant documents from an external knowledge base using semantic search, then including those documents in the prompt as context. Agentic systems use RAG to ground answers in up-to-date or domain-specific information that was not present in the model's training data, reducing hallucination and improving factual accuracy.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "retrieval_augmented_generation", "content_type": "explanation", "difficulty": "beginner"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Standard RAG concept retrieval query."
+    },
+    {
+      "id": "TC-004",
+      "category": "handoff",
+      "user_query": "[Student ID: student_007] My answer: In a multi-agent system, agents collaborate by passing messages and sharing a common state, with each agent specialising in a subset of tools and responsibilities.",
+      "expected_ground_truth": "The Researcher evaluates the student's answer as correct, emits a HANDOFF_TO_ANALYST signal with a high proposed score, and the Analyst calls update_student_progress with the correct score before giving structured positive feedback on the accurate description of multi-agent collaboration.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "multi_agent_systems", "content_type": "explanation", "difficulty": "intermediate"}},
+        {"tool": "get_student_progress", "args": {"student_id": "student_007", "topic": "multi_agent_systems"}},
+        {"tool": "update_student_progress", "args": {"student_id": "student_007", "topic": "multi_agent_systems", "score": 1.0}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node", "analyst_node", "analyst_tools", "analyst_node"],
+      "notes": "Full multi-agent pipeline with HITL breakpoint. Correct student answer."
+    },
+    {
+      "id": "TC-005",
+      "category": "retrieval",
+      "user_query": "Can you give me a practice problem on tool use in LLM agents?",
+      "expected_ground_truth": "Practice problem: An LLM agent needs to answer 'What is the current weather in London?' Given tools: web_search(query), get_weather(city), calculator(expression) — which tool should the agent call first, and what argument should it pass? Answer: get_weather(city='London'), since this tool directly addresses the query without needing a general web search.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "tool_use", "content_type": "practice", "difficulty": "beginner"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Practice problem retrieval — verifies content_type=practice is used."
+    },
+    {
+      "id": "TC-006",
+      "category": "retrieval",
+      "user_query": "Describe the difference between short-term and long-term memory in AI agents.",
+      "expected_ground_truth": "Short-term (in-context) memory is the information held within the active context window of the LLM during a single session — it is fast but limited in size and lost when the session ends. Long-term memory is stored externally in a database or vector store and persists across sessions; the agent retrieves relevant memories on demand. Agentic systems often combine both: in-context for recent exchanges and external storage for persistent knowledge.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "agent_memory", "content_type": "explanation", "difficulty": "beginner"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Agent memory taxonomy — tests content breadth of the vector store."
+    },
+    {
+      "id": "TC-007",
+      "category": "tool_call",
+      "user_query": "[Student ID: student_015] Update my progress: I scored 91 out of 100 on the LangGraph quiz.",
+      "expected_ground_truth": "The Analyst updates student_015's progress record with a score of 0.91 for the topic langgraph, confirms the update, and provides motivational feedback on their strong performance.",
+      "expected_tool_calls": [
+        {"tool": "get_student_progress", "args": {"student_id": "student_015", "topic": "langgraph"}},
+        {"tool": "update_student_progress", "args": {"student_id": "student_015", "topic": "langgraph", "score": 0.91}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node", "analyst_node", "analyst_tools", "analyst_node"],
+      "notes": "Tests correct score normalisation (91/100 → 0.91) and update_student_progress argument binding."
+    },
+    {
+      "id": "TC-008",
+      "category": "retrieval",
+      "user_query": "What is the difference between a chain and an agent in LangChain?",
+      "expected_ground_truth": "A chain in LangChain is a fixed, deterministic sequence of steps (e.g. prompt → LLM → parser) that always executes the same path. An agent is dynamic: it uses an LLM to decide at runtime which tools to call and in what order, looping until it has enough information to produce a final answer. Chains are predictable and fast; agents are flexible but less deterministic.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "chains_vs_agents", "content_type": "explanation", "difficulty": "intermediate"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Core LangChain distinction — tests conceptual retrieval quality."
+    },
+    {
+      "id": "TC-009",
+      "category": "memory",
+      "user_query": "Can you summarise the agentic AI topics we have covered so far in this session?",
+      "expected_ground_truth": "The agent uses the rolling_summary field to reconstruct a concise list of agentic AI topics discussed earlier in the conversation window, reporting them accurately without hallucinating topics that were not covered.",
+      "expected_tool_calls": [],
+      "expected_agent_flow": ["researcher_node"],
+      "notes": "Tests rolling-summary recall — no tool call should be needed."
+    },
+    {
+      "id": "TC-010",
+      "category": "handoff",
+      "user_query": "[Student ID: student_099] My answer: Human-in-the-loop means a human can review and approve or reject an agent's proposed action before it is executed, which is useful for high-risk operations.",
+      "expected_ground_truth": "Researcher confirms the answer is correct and complete, proposes a high score, triggers HANDOFF_TO_ANALYST, and the Analyst stores the score while praising the student's accurate description of HITL safety patterns.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "human_in_the_loop", "content_type": "explanation", "difficulty": "intermediate"}},
+        {"tool": "get_student_progress", "args": {"student_id": "student_099", "topic": "human_in_the_loop"}},
+        {"tool": "update_student_progress", "args": {"student_id": "student_099", "topic": "human_in_the_loop", "score": 1.0}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node", "analyst_node", "analyst_tools", "analyst_node"],
+      "notes": "Correct student answer on HITL — verifies high score and full handoff storage path."
+    },
+    {
+      "id": "TC-011",
+      "category": "retrieval",
+      "user_query": "I'm struggling to understand agent planning. Can you explain how task decomposition works in agentic systems?",
+      "expected_ground_truth": "Task decomposition breaks a complex goal into a sequence of smaller, manageable sub-tasks that the agent can execute one at a time. Approaches include chain-of-thought prompting (reasoning step by step), Plan-and-Execute (generate a full plan first, then execute each step), and Tree of Thoughts (explore multiple reasoning branches). Decomposition reduces the cognitive load on the LLM per step and makes long-horizon tasks tractable.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "task_decomposition", "content_type": "prerequisites", "difficulty": "beginner"}},
+        {"tool": "retrieve_content", "args": {"topic": "task_decomposition", "content_type": "explanation", "difficulty": "beginner"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Struggling student — low mastery should trigger prerequisites before explanation."
+    },
+    {
+      "id": "TC-012",
+      "category": "retrieval",
+      "user_query": "What is the agent loop and what are its main components?",
+      "expected_ground_truth": "The agent loop (also called the reasoning loop) is the core execution cycle of an LLM agent. Its main components are: (1) Perceive — receive the current observation or user message; (2) Think — use the LLM to reason about the next action; (3) Act — invoke a tool or produce output; (4) Observe — receive the tool result; (5) Repeat until a stopping condition is met (goal achieved, max steps reached, or a final answer is produced).",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "agent_loop", "content_type": "explanation", "difficulty": "beginner"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Foundational agent loop concept — faithfulness score should penalise missing core components."
+    },
+    {
+      "id": "TC-013",
+      "category": "handoff",
+      "user_query": "[Student ID: student_023] My answer: Vector databases store embeddings and support exact keyword search just like a regular SQL database.",
+      "expected_ground_truth": "The Researcher identifies the answer as incorrect — vector databases support approximate nearest-neighbour (ANN) semantic search on dense embeddings, not exact keyword search like SQL. The Researcher proposes a low score, triggers a handoff, and the Analyst provides corrective feedback explaining the distinction.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "vector_databases", "content_type": "explanation", "difficulty": "intermediate"}},
+        {"tool": "get_student_progress", "args": {"student_id": "student_023", "topic": "vector_databases"}},
+        {"tool": "update_student_progress", "args": {"student_id": "student_023", "topic": "vector_databases", "score": 0.2}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node", "analyst_node", "analyst_tools", "analyst_node"],
+      "notes": "Incorrect student answer — tests low score assignment and corrective feedback quality."
+    },
+    {
+      "id": "TC-014",
+      "category": "edge_case",
+      "user_query": "[Student ID: student_001] aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected_ground_truth": "The agent gracefully handles the unintelligible input and politely asks the student to clarify their question without crashing or calling any tool.",
+      "expected_tool_calls": [],
+      "expected_agent_flow": ["researcher_node"],
+      "notes": "Garbage input — tests graceful degradation without a tool call."
+    },
+    {
+      "id": "TC-015",
+      "category": "tool_call",
+      "user_query": "[Student ID: student_056] Show me my current progress on the topic of retrieval_augmented_generation.",
+      "expected_ground_truth": "The Researcher calls get_student_progress with student_id=student_056 and topic=retrieval_augmented_generation, then presents the returned mastery score and any available session history in a readable format.",
+      "expected_tool_calls": [
+        {"tool": "get_student_progress", "args": {"student_id": "student_056", "topic": "retrieval_augmented_generation"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Tool argument fidelity — verifies student_id and topic are correctly extracted."
+    },
+    {
+      "id": "TC-016",
+      "category": "retrieval",
+      "user_query": "What is the difference between zero-shot and few-shot prompting for agents?",
+      "expected_ground_truth": "Zero-shot prompting provides only a task description with no examples, relying entirely on the model's pre-trained knowledge. Few-shot prompting includes one or more worked examples (input-output pairs) in the prompt to guide the model's behaviour. For agents, few-shot examples can demonstrate the desired Thought/Action/Observation format, making the agent more reliable at following the ReAct loop without explicit fine-tuning.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "prompting_strategies", "content_type": "explanation", "difficulty": "beginner"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Prompting strategy distinction — tests precision of retrieved content."
+    },
+    {
+      "id": "TC-017",
+      "category": "memory",
+      "user_query": "Based on what we have discussed in this session, which agentic AI concept am I finding most difficult?",
+      "expected_ground_truth": "The agent references the rolling_summary to identify concepts that generated confusion or follow-up questions earlier in the session, then calls get_student_progress to check mastery scores, and synthesises both sources to give a personalised observation without inventing data.",
+      "expected_tool_calls": [
+        {"tool": "get_student_progress", "args": {"student_id": "student_001", "topic": "agentic_ai_fundamentals"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Memory + progress tool combined — tests faithful synthesis of session history and stored scores."
+    },
+    {
+      "id": "TC-018",
+      "category": "retrieval",
+      "user_query": "Can you create a practice quiz with 3 questions about LangGraph?",
+      "expected_ground_truth": "A three-question quiz covering LangGraph fundamentals: (1) What data structure does LangGraph use to represent an agent workflow — a graph of nodes and edges; (2) What is the purpose of a StateGraph in LangGraph — it holds shared state passed between nodes; (3) How does LangGraph implement human-in-the-loop — via interrupt_before or interrupt_after parameters that pause execution at a named node.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "langgraph", "content_type": "practice", "difficulty": "intermediate"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Multi-question generation — tests instruction-following and content_type=practice usage."
+    },
+    {
+      "id": "TC-019",
+      "category": "tool_call",
+      "user_query": "[Student ID: student_031] I just finished studying agent evaluation methods. Can you check if I'm ready to move on?",
+      "expected_ground_truth": "The Researcher calls get_student_progress for student_031 on agent_evaluation, reads the mastery score, and advises the student to advance if mastery is at or above 0.7, or to review prerequisite topics if mastery is below 0.7.",
+      "expected_tool_calls": [
+        {"tool": "get_student_progress", "args": {"student_id": "student_031", "topic": "agent_evaluation"}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node"],
+      "notes": "Mastery threshold logic — tests correct topic mapping and advance/revisit recommendation."
+    },
+    {
+      "id": "TC-020",
+      "category": "handoff",
+      "user_query": "[Student ID: student_088] My answer: In LangGraph, nodes are Python functions that read from and write to a shared state object, and edges define the control flow between them, including conditional edges that route dynamically based on state.",
+      "expected_ground_truth": "Researcher confirms the answer is correct and detailed, emits a HANDOFF_TO_ANALYST signal with a high score, and the Analyst updates the student's LangGraph progress and gives positive feedback on the accurate description of nodes, edges, and conditional routing.",
+      "expected_tool_calls": [
+        {"tool": "retrieve_content", "args": {"topic": "langgraph", "content_type": "explanation", "difficulty": "intermediate"}},
+        {"tool": "get_student_progress", "args": {"student_id": "student_088", "topic": "langgraph"}},
+        {"tool": "update_student_progress", "args": {"student_id": "student_088", "topic": "langgraph", "score": 1.0}}
+      ],
+      "expected_agent_flow": ["researcher_node", "researcher_tools", "researcher_node", "analyst_node", "analyst_tools", "analyst_node"],
+      "notes": "LangGraph handoff — correct detailed answer, verifies SESSION_COMPLETE signal is emitted."
+    }
+  ]
+}

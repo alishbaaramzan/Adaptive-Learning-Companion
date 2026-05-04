@@ -100,7 +100,7 @@ def test_semantic_search(collection):
 
 def test_difficulty_filter(collection):
     section("Metadata Filter — difficulty=intermediate", 2)
-    query = "Explain the concept simply with an example"
+    query = "Explain the concept of agentic ai simply with an example"
     print(f"  Query   : \"{query}\"")
     print(f"  Filter  : difficulty = 'intermediate'")
 
