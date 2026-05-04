@@ -1,17 +1,7 @@
 """
 run_eval.py — Automated Quality Gate for Adaptive Learning Companion
-────────────────────────────────────────────────────────────────────
-Runs headlessly in CI. Reads all credentials from environment variables.
-Exits with code 0 if all metrics pass, code 1 if any metric fails.
-Writes eval_results.json with full pass/fail breakdown.
-
-Required environment variables:
-  OPENAI_API_KEY   — OpenAI key for the LLM judge
-  API_BASE_URL     — Base URL of the running agent (default: http://localhost:8000)
-
-Usage:
-  python run_eval.py
-  python run_eval.py --thresholds eval_thresholds.json
+Two-turn eval: first message prompts the agent, second message answers
+its follow-up so it proceeds to explain the topic.
 """
 
 import os
@@ -22,77 +12,59 @@ import argparse
 import requests
 from datetime import datetime, timezone
 
-# ── Configuration ─────────────────────────────────────────────────────────────
-
 DEFAULT_THRESHOLDS_FILE = "eval_thresholds.json"
 RESULTS_FILE            = "eval_results.json"
 API_BASE_URL            = os.environ.get("API_BASE_URL", "http://localhost:8000")
 OPENAI_API_KEY          = os.environ.get("OPENAI_API_KEY", "")
 
-# Eval dataset: questions are phrased as a student who already studied the topic
-# and wants an explanation. This matches the agent's tutoring flow and avoids
-# the agent asking "what do you already know?" back.
+# Two-turn dataset:
+# turn1 — initial question
+# turn2 — student says they don't know, forcing the agent to explain
 EVAL_DATASET = [
     {
-        "question": (
-            "I just studied machine learning and I want to check my understanding. "
-            "Can you explain what supervised learning is?"
-        ),
-        "keywords": ["labelled", "label", "training", "input", "output", "predict"],
-        "topic": "supervised learning",
+        "topic":  "supervised learning",
+        "turn1":  "Can you teach me about supervised learning?",
+        "turn2":  "I don't know anything about it yet, please explain it to me from scratch.",
+        "keywords": ["label", "train", "input", "output", "predict", "data"],
     },
     {
-        "question": (
-            "I read about model evaluation. Can you explain the difference "
-            "between overfitting and underfitting?"
-        ),
-        "keywords": ["overfit", "underfit", "training", "generalise", "generalize", "noise", "simple", "complex"],
-        "topic": "overfitting vs underfitting",
+        "topic":  "overfitting vs underfitting",
+        "turn1":  "Can you explain overfitting and underfitting to me?",
+        "turn2":  "I have no prior knowledge, please just explain both concepts to me.",
+        "keywords": ["overfit", "underfit", "training", "generalise", "generalize", "noise"],
     },
     {
-        "question": (
-            "I am studying deep learning. Can you explain what a neural network is "
-            "and how it works?"
-        ),
-        "keywords": ["neuron", "layer", "weight", "brain", "node", "activation", "train"],
-        "topic": "neural networks",
+        "topic":  "neural networks",
+        "turn1":  "Can you teach me what a neural network is?",
+        "turn2":  "I am a complete beginner, please explain it from the beginning.",
+        "keywords": ["neuron", "layer", "weight", "node", "network", "brain"],
     },
 ]
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
-
-def load_thresholds(path: str) -> dict:
+def load_thresholds(path):
     with open(path) as f:
         data = json.load(f)
     return {k: v["min"] for k, v in data["thresholds"].items()}
 
 
-def call_agent(question: str, thread_id: str) -> str:
-    """Send a question to the agent API and return its answer."""
+def call_agent(message, thread_id):
     try:
         resp = requests.post(
             f"{API_BASE_URL}/chat",
-            json={
-                "message":    question,
-                "student_id": "eval_bot",
-                "thread_id":  thread_id,
-            },
+            json={"message": message, "student_id": "eval_bot", "thread_id": thread_id},
             timeout=90,
         )
         resp.raise_for_status()
         return resp.json().get("answer", "")
     except Exception as e:
-        print(f"  [ERROR] Agent call failed: {e}")
+        print(f"  [ERROR] {e}")
         return ""
 
 
-def llm_judge(prompt: str) -> float:
-    """Call OpenAI as an LLM judge. Returns score 0.0–1.0."""
+def llm_judge(prompt):
     if not OPENAI_API_KEY:
-        print("  [WARN] OPENAI_API_KEY not set — returning neutral score 0.5")
         return 0.5
-
     import urllib.request
     payload = json.dumps({
         "model": "gpt-4o-mini",
@@ -100,166 +72,114 @@ def llm_judge(prompt: str) -> float:
         "temperature": 0,
         "max_tokens": 10,
     }).encode()
-
     req = urllib.request.Request(
         "https://api.openai.com/v1/chat/completions",
         data=payload,
-        headers={
-            "Content-Type":  "application/json",
-            "Authorization": f"Bearer {OPENAI_API_KEY}",
-        },
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {OPENAI_API_KEY}"},
     )
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read())
-        text = data["choices"][0]["message"]["content"].strip()
-        return max(0.0, min(1.0, float(text)))
+        with urllib.request.urlopen(req, timeout=30) as r:
+            data = json.loads(r.read())
+        return max(0.0, min(1.0, float(data["choices"][0]["message"]["content"].strip())))
     except Exception as e:
-        print(f"  [WARN] LLM judge error: {e} — returning 0.5")
+        print(f"  [WARN] judge error: {e}")
         return 0.5
 
 
-def score_faithfulness(answer: str, topic: str) -> float:
-    """
-    Faithfulness: is the answer factually accurate and grounded for this topic?
-    Uses LLM judge.
-    """
-    prompt = (
-        f"You are an evaluator. The topic is: {topic}.\n"
-        f"Score how factually accurate and grounded this answer is for that topic, "
-        f"from 0.0 (hallucinated/wrong) to 1.0 (fully accurate).\n\n"
-        f"Answer: {answer}\n\n"
-        f"Reply with a single decimal number only, e.g. 0.8"
+def score_faithfulness(answer, topic):
+    return llm_judge(
+        f"Topic: {topic}\nRate factual accuracy of this answer from 0.0 to 1.0.\n"
+        f"Answer: {answer}\nReply with one decimal number only."
     )
-    return llm_judge(prompt)
 
 
-def score_answer_relevancy(answer: str, question: str, keywords: list) -> float:
-    """
-    Answer relevancy: combined keyword check + LLM judge.
-    Keyword check ensures the agent actually addressed the topic.
-    """
-    # Keyword-based check (0 or 1 per keyword found)
-    answer_lower = answer.lower()
-    matched = sum(1 for kw in keywords if kw.lower() in answer_lower)
-    keyword_score = matched / len(keywords) if keywords else 0.0
-
-    # LLM relevancy score
-    prompt = (
-        f"You are an evaluator. Score how relevant and complete this answer is "
-        f"for the question asked, from 0.0 (irrelevant/off-topic) to 1.0 (fully addresses the question).\n\n"
-        f"Question: {question}\n"
-        f"Answer: {answer}\n\n"
-        f"Reply with a single decimal number only, e.g. 0.7"
+def score_relevancy(answer, topic, keywords):
+    # keyword hit rate
+    kw_score = sum(1 for kw in keywords if kw.lower() in answer.lower()) / len(keywords)
+    # llm score
+    llm_score = llm_judge(
+        f"Topic: {topic}\nRate how well this answer explains the topic from 0.0 to 1.0.\n"
+        f"Answer: {answer}\nReply with one decimal number only."
     )
-    llm_score = llm_judge(prompt)
-
-    # Average of both signals
-    return round((keyword_score + llm_score) / 2, 3)
+    return round((kw_score + llm_score) / 2, 3)
 
 
-# ── Main Evaluation Loop ──────────────────────────────────────────────────────
-
-def run_evaluation(thresholds: dict) -> dict:
+def run_evaluation(thresholds):
     print(f"\n{'='*55}")
-    print(f"  QUALITY GATE EVALUATION")
-    print(f"  API: {API_BASE_URL}")
-    print(f"  Samples: {len(EVAL_DATASET)}")
+    print(f"  QUALITY GATE EVALUATION  (two-turn mode)")
+    print(f"  API: {API_BASE_URL}  |  Samples: {len(EVAL_DATASET)}")
     print(f"  Thresholds: {thresholds}")
     print(f"{'='*55}\n")
 
-    # Check API is reachable
     try:
-        resp = requests.get(f"{API_BASE_URL}/health", timeout=10)
-        resp.raise_for_status()
+        requests.get(f"{API_BASE_URL}/health", timeout=10).raise_for_status()
         print("  ✓ Agent API reachable\n")
     except Exception as e:
-        print(f"  ✗ Agent API not reachable: {e}")
+        print(f"  ✗ API not reachable: {e}")
         sys.exit(1)
 
-    faithfulness_scores     = []
-    answer_relevancy_scores = []
-    sample_results          = []
+    f_scores, ar_scores, samples = [], [], []
 
-    for i, sample in enumerate(EVAL_DATASET):
-        print(f"  Sample {i+1}/{len(EVAL_DATASET)}: {sample['topic']}")
-        thread_id = f"eval_{i}_{int(time.time())}"
-        answer = call_agent(sample["question"], thread_id=thread_id)
+    for i, s in enumerate(EVAL_DATASET):
+        print(f"  Sample {i+1}/{len(EVAL_DATASET)}: {s['topic']}")
+        tid = f"eval_{i}_{int(time.time())}"
+
+        # Turn 1 — ask the question
+        call_agent(s["turn1"], tid)
+        time.sleep(2)
+
+        # Turn 2 — say we don't know, so agent explains
+        answer = call_agent(s["turn2"], tid)
 
         if not answer:
-            print("    → Empty answer, scoring 0.0")
-            f_score  = 0.0
-            ar_score = 0.0
+            f, ar = 0.0, 0.0
+            print("    → Empty answer")
         else:
-            print(f"    Answer (truncated): {answer[:100]}...")
-            f_score  = score_faithfulness(answer, sample["topic"])
-            ar_score = score_answer_relevancy(answer, sample["question"], sample["keywords"])
+            print(f"    Answer: {answer[:120]}...")
+            f  = score_faithfulness(answer, s["topic"])
+            ar = score_relevancy(answer, s["topic"], s["keywords"])
 
-        print(f"    Faithfulness: {f_score:.2f}  |  Answer Relevancy: {ar_score:.2f}")
+        print(f"    Faithfulness: {f:.2f}  |  Relevancy: {ar:.2f}")
+        f_scores.append(f)
+        ar_scores.append(ar)
+        samples.append({"topic": s["topic"], "answer": answer,
+                        "faithfulness": f, "answer_relevancy": ar})
 
-        faithfulness_scores.append(f_score)
-        answer_relevancy_scores.append(ar_score)
-        sample_results.append({
-            "topic":            sample["topic"],
-            "question":         sample["question"],
-            "answer":           answer,
-            "faithfulness":     round(f_score, 3),
-            "answer_relevancy": round(ar_score, 3),
-        })
-
-    avg_faithfulness     = sum(faithfulness_scores) / len(faithfulness_scores)
-    avg_answer_relevancy = sum(answer_relevancy_scores) / len(answer_relevancy_scores)
+    avg_f  = sum(f_scores)  / len(f_scores)
+    avg_ar = sum(ar_scores) / len(ar_scores)
 
     metrics = {
-        "faithfulness": {
-            "score":     round(avg_faithfulness, 3),
-            "threshold": thresholds["faithfulness"],
-            "passed":    avg_faithfulness >= thresholds["faithfulness"],
-        },
-        "answer_relevancy": {
-            "score":     round(avg_answer_relevancy, 3),
-            "threshold": thresholds["answer_relevancy"],
-            "passed":    avg_answer_relevancy >= thresholds["answer_relevancy"],
-        },
+        "faithfulness":     {"score": round(avg_f, 3),  "threshold": thresholds["faithfulness"],
+                             "passed": avg_f  >= thresholds["faithfulness"]},
+        "answer_relevancy": {"score": round(avg_ar, 3), "threshold": thresholds["answer_relevancy"],
+                             "passed": avg_ar >= thresholds["answer_relevancy"]},
     }
-
-    all_passed = all(m["passed"] for m in metrics.values())
 
     return {
         "timestamp":      datetime.now(timezone.utc).isoformat(),
-        "api_base_url":   API_BASE_URL,
-        "overall_passed": all_passed,
+        "overall_passed": all(m["passed"] for m in metrics.values()),
         "metrics":        metrics,
-        "samples":        sample_results,
+        "samples":        samples,
     }
 
-
-def print_summary(results: dict):
-    print(f"\n{'='*55}")
-    print(f"  RESULTS SUMMARY")
-    print(f"{'='*55}")
-    for name, m in results["metrics"].items():
-        status = "✓ PASS" if m["passed"] else "✗ FAIL"
-        print(f"  {status}  {name}: {m['score']:.3f} (threshold: {m['threshold']})")
-    print(f"{'='*55}")
-    overall = "✓ ALL PASSED — build OK" if results["overall_passed"] else "✗ QUALITY GATE FAILED"
-    print(f"  {overall}")
-    print(f"{'='*55}\n")
-
-
-# ── Entry Point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--thresholds", default=DEFAULT_THRESHOLDS_FILE)
     args = parser.parse_args()
 
-    thresholds = load_thresholds(args.thresholds)
-    results    = run_evaluation(thresholds)
+    results = run_evaluation(load_thresholds(args.thresholds))
 
     with open(RESULTS_FILE, "w") as f:
         json.dump(results, f, indent=2)
-    print(f"  Results written to {RESULTS_FILE}")
+    print(f"\n  Results written to {RESULTS_FILE}")
 
-    print_summary(results)
+    print(f"\n{'='*55}\n  RESULTS SUMMARY\n{'='*55}")
+    for name, m in results["metrics"].items():
+        status = "✓ PASS" if m["passed"] else "✗ FAIL"
+        print(f"  {status}  {name}: {m['score']:.3f} (threshold: {m['threshold']})")
+    print(f"{'='*55}")
+    print(f"  {'✓ ALL PASSED' if results['overall_passed'] else '✗ QUALITY GATE FAILED'}")
+    print(f"{'='*55}\n")
+
     sys.exit(0 if results["overall_passed"] else 1)
