@@ -31,7 +31,6 @@
     height: 100vh;
     display: grid;
     grid-template-columns: 280px 1fr;
-    grid-template-rows: 1fr;
     overflow: hidden;
   }
 
@@ -68,12 +67,7 @@
 
   .field-group { display: flex; flex-direction: column; gap: 8px; }
 
-  label {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: .06em;
-    padding: 0 4px;
-  }
+  label { font-size: 11px; color: var(--muted); letter-spacing: .06em; padding: 0 4px; }
 
   input, select {
     background: var(--card);
@@ -110,11 +104,7 @@
   .btn-warn      { background: var(--warn); color: #0d0f14; }
   .btn-full      { width: 100%; }
 
-  .mode-toggle {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
+  .mode-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .mode-btn {
     font-family: 'Syne', sans-serif;
     font-size: 11px;
@@ -130,300 +120,232 @@
     transition: all .2s;
     text-align: center;
   }
-  .mode-btn.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-  }
+  .mode-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   .status-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 8px;
     padding: 10px 12px;
     border-radius: 8px;
     background: var(--card);
     border: 1px solid var(--border);
     font-size: 11px;
   }
-  .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--muted);
-    flex-shrink: 0;
-  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
   .dot.online  { background: var(--success); box-shadow: 0 0 6px var(--success); }
   .dot.working { background: var(--warn); animation: pulse 1s infinite; }
-
-  @keyframes pulse {
-    0%,100% { opacity: 1; } 50% { opacity: .4; }
-  }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
 
   .agent-indicator {
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 500;
-    border: 1px solid;
-    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-radius: 8px; font-size: 11px;
+    font-weight: 500; border: 1px solid; display: flex; align-items: center; gap: 8px;
   }
-  .agent-indicator.researcher {
-    background: rgba(91,140,255,.1);
-    border-color: rgba(91,140,255,.3);
-    color: var(--researcher);
+  .agent-indicator.researcher { background: rgba(91,140,255,.1); border-color: rgba(91,140,255,.3); color: var(--researcher); }
+  .agent-indicator.analyst    { background: rgba(167,139,250,.1); border-color: rgba(167,139,250,.3); color: var(--analyst); }
+
+  /* feedback stats panel */
+  .stats-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 8px;
   }
-  .agent-indicator.analyst {
-    background: rgba(167,139,250,.1);
-    border-color: rgba(167,139,250,.3);
-    color: var(--analyst);
+  .stats-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    letter-spacing: .08em; text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: center;
   }
+  .stats-refresh { cursor: pointer; font-size: 12px; transition: transform .3s; }
+  .stats-refresh:hover { transform: rotate(180deg); }
+  .stats-row { display: flex; justify-content: space-between; font-size: 11px; }
+  .stats-val { font-weight: 600; }
+  .stats-val.good { color: var(--success); }
+  .stats-val.bad  { color: var(--danger); }
+  .stats-bar-wrap {
+    height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .stats-bar-fill { height: 100%; background: var(--danger); border-radius: 2px; transition: width .5s; }
 
   /* HITL panel */
   .hitl-panel {
     background: rgba(251,191,36,.06);
     border: 1px solid rgba(251,191,36,.3);
-    border-radius: 10px;
-    padding: 14px;
-    display: none;
-    flex-direction: column;
-    gap: 10px;
+    border-radius: 10px; padding: 14px;
+    display: none; flex-direction: column; gap: 10px;
   }
   .hitl-panel.visible { display: flex; }
-  .hitl-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--warn);
-    letter-spacing: .05em;
-    text-transform: uppercase;
-  }
-  .hitl-score-row { display: flex; gap: 6px; align-items: center; }
-  .hitl-score-row input { flex: 1; }
+  .hitl-title { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--warn); letter-spacing:.05em; text-transform:uppercase; }
+  .hitl-score-row { display:flex; gap:6px; align-items:center; }
+  .hitl-score-row input { flex:1; }
 
   .sidebar-footer {
-    margin-top: auto;
-    padding: 12px 8px 0;
+    margin-top: auto; padding: 12px 8px 0;
     border-top: 1px solid var(--border);
-    font-size: 10px;
-    color: var(--muted);
-    line-height: 1.6;
+    font-size: 10px; color: var(--muted); line-height: 1.6;
   }
 
-  /* ── MAIN CHAT AREA ── */
-  .main {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+  /* ── MAIN ── */
+  .main { display: flex; flex-direction: column; overflow: hidden; }
 
   .chat-header {
-    padding: 20px 28px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
+    padding: 20px 28px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
   }
-  .chat-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 800;
-  }
+  .chat-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
   .thread-pill {
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 4px 12px;
+    font-size: 11px; color: var(--muted);
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 12px;
   }
 
   .messages {
-    flex: 1;
-    overflow-y: auto;
+    flex: 1; overflow-y: auto;
     padding: 24px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    display: flex; flex-direction: column; gap: 16px;
     scroll-behavior: smooth;
   }
   .messages::-webkit-scrollbar { width: 4px; }
-  .messages::-webkit-scrollbar-track { background: transparent; }
   .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-  .msg {
-    max-width: 76%;
-    animation: msgIn .25s ease;
-  }
-  @keyframes msgIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .msg { max-width: 76%; animation: msgIn .25s ease; }
+  @keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
-  .msg.user { align-self: flex-end; }
+  .msg.user  { align-self: flex-end; }
   .msg.agent { align-self: flex-start; }
 
   .msg-meta {
-    font-size: 10px;
-    color: var(--muted);
-    margin-bottom: 5px;
-    letter-spacing: .04em;
-    padding: 0 4px;
+    font-size: 10px; color: var(--muted);
+    margin-bottom: 5px; letter-spacing: .04em; padding: 0 4px;
   }
   .msg.user .msg-meta { text-align: right; }
 
   .msg-bubble {
-    padding: 14px 16px;
-    border-radius: 12px;
-    font-size: 13px;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    word-break: break-word;
+    padding: 14px 16px; border-radius: 12px;
+    font-size: 13px; line-height: 1.65;
+    white-space: pre-wrap; word-break: break-word;
   }
   .msg.user .msg-bubble {
-    background: var(--accent);
-    color: #fff;
-    border-bottom-right-radius: 3px;
+    background: var(--accent); color: #fff; border-bottom-right-radius: 3px;
   }
   .msg.agent.researcher .msg-bubble {
-    background: var(--card);
-    border: 1px solid rgba(91,140,255,.25);
-    border-bottom-left-radius: 3px;
+    background: var(--card); border: 1px solid rgba(91,140,255,.25); border-bottom-left-radius: 3px;
   }
   .msg.agent.analyst .msg-bubble {
-    background: var(--card);
-    border: 1px solid rgba(167,139,250,.25);
-    border-bottom-left-radius: 3px;
-  }
-  .msg.system .msg-bubble {
-    background: rgba(251,191,36,.08);
-    border: 1px solid rgba(251,191,36,.2);
-    color: var(--warn);
-    font-size: 12px;
-    align-self: center;
-    max-width: 90%;
-    text-align: center;
+    background: var(--card); border: 1px solid rgba(167,139,250,.25); border-bottom-left-radius: 3px;
   }
   .msg.system { align-self: center; max-width: 90%; }
-  .msg.error .msg-bubble {
-    background: rgba(248,113,113,.08);
-    border: 1px solid rgba(248,113,113,.2);
-    color: var(--danger);
+  .msg.system .msg-bubble {
+    background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.2);
+    color: var(--warn); font-size: 12px; text-align: center;
   }
   .msg.error { align-self: center; max-width: 90%; }
+  .msg.error .msg-bubble {
+    background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.2); color: var(--danger);
+  }
 
-  /* SSE event log inside a streaming bubble */
-  .stream-events {
-    font-size: 10px;
+  /* ── FEEDBACK BUTTONS ── */
+  .feedback-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 8px; padding: 0 2px;
+    animation: fadeIn .3s ease .1s both;
+  }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .feedback-label { font-size: 10px; color: var(--muted); letter-spacing:.05em; }
+
+  .fb-btn {
+    display: flex; align-items: center; gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .2s;
     color: var(--muted);
-    border-top: 1px solid var(--border);
-    margin-top: 10px;
-    padding-top: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    max-height: 80px;
-    overflow-y: auto;
+    font-family: 'DM Mono', monospace;
+  }
+  .fb-btn:hover { border-color: var(--accent); color: var(--text); }
+  .fb-btn.good:hover { border-color: var(--success); background: rgba(52,211,153,.08); color: var(--success); }
+  .fb-btn.bad:hover  { border-color: var(--danger);  background: rgba(248,113,113,.08); color: var(--danger); }
+  .fb-btn.selected-good {
+    border-color: var(--success); background: rgba(52,211,153,.15);
+    color: var(--success); pointer-events: none;
+  }
+  .fb-btn.selected-bad {
+    border-color: var(--danger); background: rgba(248,113,113,.15);
+    color: var(--danger); pointer-events: none;
+  }
+  .fb-btn.faded { opacity: .3; pointer-events: none; }
+
+  .fb-thanks {
+    font-size: 10px; color: var(--success);
+    animation: fadeIn .3s ease;
+  }
+
+  /* stream events */
+  .stream-events {
+    font-size: 10px; color: var(--muted);
+    border-top: 1px solid var(--border); margin-top: 10px; padding-top: 8px;
+    display: flex; flex-direction: column; gap: 2px;
+    max-height: 80px; overflow-y: auto;
   }
   .stream-event { display: flex; gap: 6px; }
-  .se-tag {
-    color: var(--accent2);
-    flex-shrink: 0;
-  }
+  .se-tag { color: var(--accent2); flex-shrink: 0; }
 
   /* typing indicator */
   .typing-indicator {
     display: flex; gap: 4px; padding: 14px 16px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    border-bottom-left-radius: 3px;
-    width: fit-content;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; border-bottom-left-radius: 3px; width: fit-content;
   }
   .typing-dot {
     width: 6px; height: 6px; border-radius: 50%;
-    background: var(--muted);
-    animation: bounce .9s infinite;
+    background: var(--muted); animation: bounce .9s infinite;
   }
   .typing-dot:nth-child(2) { animation-delay: .15s; }
   .typing-dot:nth-child(3) { animation-delay: .3s; }
-  @keyframes bounce {
-    0%,80%,100% { transform: translateY(0); }
-    40%         { transform: translateY(-5px); }
-  }
+  @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
 
   /* input bar */
   .input-bar {
-    padding: 16px 28px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 10px;
-    flex-shrink: 0;
-    background: var(--surface);
+    padding: 16px 28px; border-top: 1px solid var(--border);
+    display: flex; gap: 10px; flex-shrink: 0; background: var(--surface);
   }
-
   .input-bar textarea {
-    flex: 1;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    padding: 12px 14px;
-    resize: none;
-    outline: none;
-    transition: border-color .2s;
-    min-height: 46px;
-    max-height: 120px;
-    line-height: 1.5;
+    flex: 1; background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text);
+    font-family: 'DM Mono', monospace; font-size: 13px;
+    padding: 12px 14px; resize: none; outline: none;
+    transition: border-color .2s; min-height: 46px; max-height: 120px; line-height: 1.5;
   }
   .input-bar textarea:focus { border-color: var(--accent); }
   .input-bar textarea::placeholder { color: var(--muted); }
 
   .send-btn {
-    background: var(--accent);
-    border: none;
-    border-radius: 10px;
-    width: 46px;
-    height: 46px;
-    cursor: pointer;
+    background: var(--accent); border: none; border-radius: 10px;
+    width: 46px; height: 46px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: opacity .15s, transform .1s;
-    flex-shrink: 0;
+    transition: opacity .15s, transform .1s; flex-shrink: 0;
   }
   .send-btn:hover { opacity: .85; }
   .send-btn:active { transform: scale(.95); }
   .send-btn:disabled { opacity: .35; cursor: not-allowed; }
   .send-btn svg { width: 18px; height: 18px; fill: #fff; }
 
-  /* welcome screen */
+  /* welcome */
   .welcome {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    gap: 16px;
-    color: var(--muted);
-    padding: 40px;
-    text-align: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    flex: 1; gap: 16px; color: var(--muted); padding: 40px; text-align: center;
   }
   .welcome-icon { font-size: 48px; }
-  .welcome h2 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 20px;
-    color: var(--text);
-  }
-  .welcome p { font-size: 12px; line-height: 1.7; max-width: 360px; }
+  .welcome h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; color: var(--text); }
+  .welcome p  { font-size: 12px; line-height: 1.7; max-width: 360px; }
 
   code {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1px 5px;
-    font-size: .9em;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: .9em;
   }
 </style>
 </head>
@@ -447,8 +369,8 @@
   <div class="field-group">
     <div class="section-label">Mode</div>
     <div class="mode-toggle">
-      <div class="mode-btn active" id="modeChat" onclick="setMode('chat')">Chat</div>
-      <div class="mode-btn"       id="modeStream" onclick="setMode('stream')">Stream</div>
+      <div class="mode-btn active" id="modeChat"   onclick="setMode('chat')">Chat</div>
+      <div class="mode-btn"        id="modeStream" onclick="setMode('stream')">Stream</div>
     </div>
   </div>
 
@@ -464,17 +386,33 @@
     </div>
   </div>
 
+  <!-- Live feedback stats -->
+  <div class="field-group">
+    <div class="section-label">Feedback Stats</div>
+    <div class="stats-panel" id="statsPanel">
+      <div class="stats-title">
+        Session
+        <span class="stats-refresh" onclick="loadStats()" title="Refresh">↻</span>
+      </div>
+      <div class="stats-row"><span>Total responses</span><span class="stats-val" id="statTotal">—</span></div>
+      <div class="stats-row"><span>👍 Positive</span><span class="stats-val good" id="statGood">—</span></div>
+      <div class="stats-row"><span>👎 Negative</span><span class="stats-val bad"  id="statBad">—</span></div>
+      <div class="stats-bar-wrap"><div class="stats-bar-fill" id="statBar" style="width:0%"></div></div>
+      <div id="statTopBad" style="font-size:10px;color:var(--muted);line-height:1.6"></div>
+    </div>
+  </div>
+
   <!-- HITL panel -->
   <div class="hitl-panel" id="hitlPanel">
     <div class="hitl-title">⚠ HITL Review Pending</div>
-    <div style="font-size:11px; color: var(--muted); line-height:1.6">
+    <div style="font-size:11px;color:var(--muted);line-height:1.6">
       Analyst wants to commit score <strong id="hitlScore" style="color:var(--warn)">—</strong>
       for thread <code id="hitlThread">—</code>
     </div>
     <div class="hitl-score-row">
       <input id="editScoreInput" placeholder="Override score…" style="font-size:12px" />
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
       <button class="btn btn-success" style="font-size:10px;padding:8px 4px" onclick="hitlAction('approve')">✓ Approve</button>
       <button class="btn btn-warn"    style="font-size:10px;padding:8px 4px" onclick="hitlAction('edit')">✎ Edit</button>
       <button class="btn btn-danger"  style="font-size:10px;padding:8px 4px" onclick="hitlAction('cancel')">✕ Cancel</button>
@@ -483,7 +421,7 @@
 
   <div class="sidebar-footer">
     Multi-Agent v4 · LangGraph<br>
-    FastAPI · Lab 8
+    FastAPI · Drift Monitoring
   </div>
 </aside>
 
@@ -498,7 +436,8 @@
     <div class="welcome" id="welcome">
       <div class="welcome-icon">🎓</div>
       <h2>Ready to learn?</h2>
-      <p>Set your <strong>Student ID</strong> and <strong>Thread ID</strong> in the sidebar, then send a message. Use <code>Stream</code> mode to watch tokens arrive live.</p>
+      <p>Set your <strong>Student ID</strong> and <strong>Thread ID</strong> in the sidebar, then send a message.
+         Rate each response with 👍 or 👎 to help track quality over time.</p>
     </div>
   </div>
 
@@ -520,12 +459,12 @@
   // ── helpers ──────────────────────────────────────────────
   function setMode(m) {
     mode = m;
-    document.getElementById('modeChat').classList.toggle('active', m === 'chat');
-    document.getElementById('modeStream').classList.toggle('active', m === 'stream');
+    document.getElementById('modeChat').classList.toggle('active', m==='chat');
+    document.getElementById('modeStream').classList.toggle('active', m==='stream');
   }
 
   function newThread() {
-    const id = Math.random().toString(36).slice(2, 10);
+    const id = Math.random().toString(36).slice(2,10);
     document.getElementById('threadId').value = id;
     currentThreadId = id;
     document.getElementById('threadPill').textContent = 'Thread: ' + id;
@@ -537,11 +476,11 @@
   }
 
   function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   }
 
   function getConfig() {
-    const base      = document.getElementById('apiUrl').value.replace(/\/$/, '');
+    const base      = document.getElementById('apiUrl').value.replace(/\/$/,'');
     const studentId = document.getElementById('studentId').value || 'student_001';
     let   threadId  = document.getElementById('threadId').value.trim();
     if (!threadId) { newThread(); threadId = document.getElementById('threadId').value; }
@@ -552,19 +491,17 @@
 
   function setStatus(state, text) {
     const dot = document.getElementById('statusDot');
-    dot.className = 'dot ' + (state === 'working' ? 'working' : state === 'online' ? 'online' : '');
+    dot.className = 'dot ' + (state==='working' ? 'working' : state==='online' ? 'online' : '');
     document.getElementById('statusText').textContent = text;
   }
 
   function showAgent(agent) {
-    const el    = document.getElementById('agentIndicator');
-    const icon  = document.getElementById('agentIcon');
-    const label = document.getElementById('agentLabel');
-    if (!agent) { el.style.display = 'none'; return; }
+    const el = document.getElementById('agentIndicator');
+    if (!agent) { el.style.display='none'; return; }
     el.style.display = 'flex';
     el.className = 'agent-indicator ' + agent;
-    icon.textContent  = agent === 'analyst' ? '📊' : '🔬';
-    label.textContent = agent === 'analyst' ? 'Analyst' : 'Researcher';
+    document.getElementById('agentIcon').textContent  = agent==='analyst' ? '📊' : '🔬';
+    document.getElementById('agentLabel').textContent = agent==='analyst' ? 'Analyst' : 'Researcher';
   }
 
   // ── message rendering ────────────────────────────────────
@@ -577,12 +514,12 @@
     removeWelcome();
     const msgs = document.getElementById('messages');
     const wrap = document.createElement('div');
-    wrap.className = `msg ${role} ${agent || ''}`;
+    wrap.className = `msg ${role} ${agent||''}`;
 
-    const meta   = document.createElement('div');
+    const meta = document.createElement('div');
     meta.className = 'msg-meta';
-    const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    meta.textContent = role === 'user' ? `You · ${now}` :
+    const now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    meta.textContent = role==='user' ? `You · ${now}` :
                        agent ? `${agent.charAt(0).toUpperCase()+agent.slice(1)} · ${now}` : now;
 
     const bubble = document.createElement('div');
@@ -591,6 +528,13 @@
 
     wrap.appendChild(meta);
     wrap.appendChild(bubble);
+
+    // Add feedback row for agent messages only
+    if (role === 'agent' && text && !text.startsWith('Error')) {
+      const fbRow = buildFeedbackRow(text, agent||'researcher');
+      wrap.appendChild(fbRow);
+    }
+
     msgs.appendChild(wrap);
     msgs.scrollTop = msgs.scrollHeight;
     return bubble;
@@ -629,6 +573,102 @@
     if (t) t.remove();
   }
 
+  // ── FEEDBACK BUTTONS ─────────────────────────────────────
+  // Track the last user message for logging
+  let lastUserInput = '';
+
+  function buildFeedbackRow(agentResponse, agentType) {
+    const row = document.createElement('div');
+    row.className = 'feedback-row';
+
+    const label = document.createElement('span');
+    label.className = 'feedback-label';
+    label.textContent = 'Helpful?';
+
+    const goodBtn = document.createElement('button');
+    goodBtn.className = 'fb-btn good';
+    goodBtn.innerHTML = '👍 Good';
+
+    const badBtn = document.createElement('button');
+    badBtn.className = 'fb-btn bad';
+    badBtn.innerHTML = '👎 Bad';
+
+    const thanks = document.createElement('span');
+    thanks.className = 'fb-thanks';
+    thanks.style.display = 'none';
+
+    async function submitFeedback(rating) {
+      const { base, studentId, threadId } = getConfig();
+
+      // Visually commit the choice
+      if (rating === 'good') {
+        goodBtn.className = 'fb-btn selected-good';
+        badBtn.className  = 'fb-btn faded';
+        thanks.textContent = '✓ Thanks!';
+      } else {
+        badBtn.className  = 'fb-btn selected-bad';
+        goodBtn.className = 'fb-btn faded';
+        thanks.textContent = '✓ Noted';
+      }
+      thanks.style.display = 'inline';
+
+      try {
+        await fetch(`${base}/feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            thread_id:      threadId,
+            student_id:     studentId,
+            user_input:     lastUserInput || '(unknown)',
+            agent_response: agentResponse,
+            agent_type:     agentType,
+            feedback:       rating,
+          }),
+        });
+        // Refresh sidebar stats
+        loadStats();
+      } catch (e) {
+        console.warn('Feedback submit failed:', e);
+      }
+    }
+
+    goodBtn.onclick = () => submitFeedback('good');
+    badBtn.onclick  = () => submitFeedback('bad');
+
+    row.appendChild(label);
+    row.appendChild(goodBtn);
+    row.appendChild(badBtn);
+    row.appendChild(thanks);
+    return row;
+  }
+
+  // ── Live stats ────────────────────────────────────────────
+  async function loadStats() {
+    const { base } = getConfig();
+    try {
+      const res  = await fetch(`${base}/feedback/stats`);
+      if (!res.ok) return;
+      const data = await res.json();
+
+      document.getElementById('statTotal').textContent = data.total_responses ?? '—';
+      document.getElementById('statGood').textContent  = data.positive_feedback ?? '—';
+      document.getElementById('statBad').textContent   = data.negative_feedback ?? '—';
+
+      const pct = data.negative_rate ?? 0;
+      document.getElementById('statBar').style.width = pct + '%';
+
+      const topDiv = document.getElementById('statTopBad');
+      if (data.top_failed_queries && data.top_failed_queries.length) {
+        topDiv.innerHTML = '<strong style="color:var(--danger);font-size:10px">Top failed:</strong><br>'
+          + data.top_failed_queries.map(q =>
+              `· ${q.query.slice(0,34)}${q.query.length>34?'…':''} <span style="color:var(--danger)">(${q.bad_count})</span>`
+            ).join('<br>');
+      } else {
+        topDiv.innerHTML = '';
+      }
+    } catch { /* API offline — ignore */ }
+  }
+
   // ── SEND ─────────────────────────────────────────────────
   async function sendMessage() {
     if (busy) return;
@@ -637,9 +677,9 @@
     if (!text) return;
 
     const { base, studentId, threadId } = getConfig();
+    lastUserInput = text;           // store for feedback logging
     addMsg('user', text);
-    input.value = '';
-    input.style.height = 'auto';
+    input.value = ''; input.style.height = 'auto';
     setBusy(true);
 
     mode === 'stream'
@@ -654,32 +694,31 @@
     setStatus(b ? 'working' : 'online', b ? 'Processing…' : 'Ready');
   }
 
-  // ── /chat (synchronous) ──────────────────────────────────
+  // ── /chat ─────────────────────────────────────────────────
   async function sendChat(base, studentId, threadId, message) {
     const typing = addTyping();
     try {
       const res = await fetch(`${base}/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, thread_id: threadId, student_id: studentId }),
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({message, thread_id:threadId, student_id:studentId}),
       });
-
       removeTyping();
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({ detail: res.statusText }));
-        addMsg('agent', `Error ${res.status}: ${err.detail || res.statusText}`, 'error');
+        const err = await res.json().catch(()=>({detail:res.statusText}));
+        addMsg('agent', `Error ${res.status}: ${err.detail||res.statusText}`, 'error');
         setBusy(false); return;
       }
 
-      const data = await res.json();
+      const data  = await res.json();
       const agent = data.status?.current_agent || 'researcher';
       showAgent(agent);
       addMsg('agent', data.answer, agent);
 
       if (data.hitl_pending) {
         showHitl(data.thread_id, data.status?.proposed_score);
-        addSystem(`⚠ HITL pause — proposed score: ${data.status?.proposed_score || '?'}. Use sidebar to approve / edit / cancel.`);
+        addSystem(`⚠ HITL pause — proposed score: ${data.status?.proposed_score||'?'}. Use sidebar to approve / edit / cancel.`);
       }
     } catch (e) {
       removeTyping();
@@ -688,9 +727,8 @@
     setBusy(false);
   }
 
-  // ── /stream (SSE) ────────────────────────────────────────
+  // ── /stream ───────────────────────────────────────────────
   async function sendStream(base, studentId, threadId, message) {
-    // Build a streaming bubble with live event log
     removeWelcome();
     const msgs = document.getElementById('messages');
 
@@ -703,7 +741,6 @@
 
     const bubble = document.createElement('div');
     bubble.className = 'msg-bubble';
-    bubble.textContent = '';
 
     const evLog = document.createElement('div');
     evLog.className = 'stream-events';
@@ -716,6 +753,7 @@
 
     let textContent = '';
     let eventsShown = 0;
+    let finalAgentType = 'researcher';
 
     function addEvent(tag, detail) {
       if (eventsShown >= 12) return;
@@ -730,8 +768,8 @@
     try {
       const res = await fetch(`${base}/stream`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, thread_id: threadId, student_id: studentId }),
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({message, thread_id:threadId, student_id:studentId}),
       });
 
       const reader  = res.body.getReader();
@@ -739,10 +777,9 @@
       let   buffer  = '';
 
       while (true) {
-        const { done, value } = await reader.read();
+        const {done, value} = await reader.read();
         if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
+        buffer += decoder.decode(value, {stream:true});
         const lines = buffer.split('\n');
         buffer = lines.pop();
 
@@ -763,7 +800,6 @@
               addEvent('tool', `⚙ ${event.tool}`);
               break;
             case 'token':
-              // Insert token before the event log
               if (!bubble._textNode) {
                 bubble._textNode = document.createTextNode('');
                 bubble.insertBefore(bubble._textNode, evLog);
@@ -775,7 +811,7 @@
             case 'hitl_pause':
               addEvent('hitl', `⚠ score=${event.proposed_score}`);
               showHitl(event.thread_id, event.proposed_score);
-              addSystem(`⚠ HITL pause — use sidebar to review.`);
+              addSystem('⚠ HITL pause — use sidebar to review.');
               break;
             case 'done':
               if (!textContent && event.answer) {
@@ -784,20 +820,30 @@
                   bubble.insertBefore(bubble._textNode, evLog);
                 }
                 bubble._textNode.textContent = event.answer;
+                textContent = event.answer;
               }
-              const ag = event.status?.current_agent || 'researcher';
-              showAgent(ag);
-              meta.textContent = `${ag.charAt(0).toUpperCase()+ag.slice(1)} · done`;
-              addEvent('done', '✓ complete');
+              finalAgentType = event.status?.current_agent || 'researcher';
+              showAgent(finalAgentType);
+              meta.textContent = `${finalAgentType.charAt(0).toUpperCase()+finalAgentType.slice(1)} · done`;
+              addEvent('done','✓ complete');
               break;
             case 'error':
-              bubble._textNode = bubble._textNode || document.createTextNode('');
-              bubble.insertBefore(bubble._textNode, evLog);
+              if (!bubble._textNode) {
+                bubble._textNode = document.createTextNode('');
+                bubble.insertBefore(bubble._textNode, evLog);
+              }
               bubble._textNode.textContent = 'Error: ' + event.detail;
               bubble.style.borderColor = 'rgba(248,113,113,.4)';
               break;
           }
         }
+      }
+
+      // Attach feedback row after streaming completes (if there's content)
+      if (textContent) {
+        const fbRow = buildFeedbackRow(textContent, finalAgentType);
+        wrap.appendChild(fbRow);
+        msgs.scrollTop = msgs.scrollHeight;
       }
     } catch (e) {
       addMsg('agent', 'Stream error: ' + e.message, 'error');
@@ -809,7 +855,7 @@
   // ── HITL ─────────────────────────────────────────────────
   function showHitl(threadId, score) {
     hitlThreadId = threadId;
-    document.getElementById('hitlScore').textContent  = score || '?';
+    document.getElementById('hitlScore').textContent  = score||'?';
     document.getElementById('hitlThread').textContent = threadId;
     document.getElementById('hitlPanel').classList.add('visible');
   }
@@ -822,53 +868,50 @@
 
   async function hitlAction(action) {
     if (!hitlThreadId) return;
-    const { base } = getConfig();
+    const {base} = getConfig();
     const newScore = document.getElementById('editScoreInput').value.trim();
 
-    if (action === 'edit' && !newScore) {
+    if (action==='edit' && !newScore) {
       document.getElementById('editScoreInput').focus();
       document.getElementById('editScoreInput').style.borderColor = 'var(--danger)';
       return;
     }
 
-    setStatus('working', 'Sending HITL decision…');
-
-    const body = { action };
-    if (action === 'edit') body.new_score = newScore;
+    setStatus('working','Sending HITL decision…');
+    const body = {action};
+    if (action==='edit') body.new_score = newScore;
 
     try {
       const res = await fetch(`${base}/hitl/${hitlThreadId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type':'application/json'},
         body: JSON.stringify(body),
       });
-
       const data = await res.json();
-
       if (!res.ok) {
-        addSystem(`HITL error: ${data.detail || res.statusText}`);
+        addSystem(`HITL error: ${data.detail||res.statusText}`);
       } else {
-        const label = { approve:'approved', cancel:'cancelled', edit:'edited' }[action];
+        const label = {approve:'approved',cancel:'cancelled',edit:'edited'}[action];
         addSystem(`HITL ${label} ✓`);
         if (data.answer) addMsg('agent', data.answer, 'analyst');
-        showAgent(action === 'cancel' ? 'researcher' : 'analyst');
+        showAgent(action==='cancel' ? 'researcher' : 'analyst');
       }
     } catch(e) {
       addSystem('HITL request failed: ' + e.message);
     }
 
     hideHitl();
-    setStatus('online', 'Ready');
+    setStatus('online','Ready');
   }
 
   // ── init ──────────────────────────────────────────────────
   (async function init() {
     newThread();
-    const { base } = getConfig();
+    const {base} = getConfig();
     try {
       const res = await fetch(`${base}/health`);
-      if (res.ok) setStatus('online', 'Connected');
-      else        setStatus('', 'API error');
+      if (res.ok) { setStatus('online','Connected'); loadStats(); }
+      else          setStatus('', 'API error');
     } catch {
       setStatus('', 'API offline');
     }

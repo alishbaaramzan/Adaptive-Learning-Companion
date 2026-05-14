@@ -25,12 +25,14 @@ import logging
 import uuid
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
+import os
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Path
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from langchain_core.messages import AIMessage, HumanMessage
+from feedback_routes import feedback_router, init_feedback_db
 
 # ── local imports (from the v4 lab codebase) ──────────────────────────────
 from multi_agent_graph import build_multi_agent_graph
@@ -56,7 +58,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger("api")
 
-CHECKPOINT_DB = "checkpoint_db.sqlite"
+CHECKPOINT_DB = "/app/checkpoint_data/checkpoint_db.sqlite"
+
+# Ensure directory exists (IMPORTANT for Docker volume)
+os.makedirs("/app/checkpoint_data", exist_ok=True)
 
 
 # ─────────────────────────────────────────────────────────
@@ -97,6 +102,7 @@ async def lifespan(app: FastAPI):
     _app_state.async_graph = build_multi_agent_graph(_app_state.async_checkpointer)
 
     logger.info("[STARTUP] Both graphs compiled. API ready.")
+    init_feedback_db()
     yield
 
     logger.info("[SHUTDOWN] Closing checkpointers.")
@@ -123,6 +129,8 @@ app = FastAPI(
     version="4.0.0",
     lifespan=lifespan,
 )
+
+app.include_router(feedback_router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-05-12T05:53:12.227291+00:00",
+  "overview": {
+    "total": 5,
+    "positive": 2,
+    "negative": 3,
+    "neg_rate": 60.0
+  },
+  "top_failed_queries": [
+    {
+      "query": "traditional is related to regression, classification etc while agentic one gives memory, tool and reasong",
+      "bad_count": 1
+    },
+    {
+      "query": "i think it means running a loop till a base case it met",
+      "bad_count": 1
+    },
+    {
+      "query": "first explain what recursion is",
+      "bad_count": 1
+    }
+  ],
+  "agent_breakdown": {
+    "researcher": {
+      "total": 4,
+      "good": 2,
+      "bad": 2,
+      "neg_rate": 50.0
+    },
+    "analyst": {
+      "total": 1,
+      "good": 0,
+      "bad": 1,
+      "neg_rate": 100.0
+    }
+  },
+  "daily_trend": [
+    {
+      "date": "2026-05-09",
+      "good": 2,
+      "bad": 1
+    },
+    {
+      "date": "2026-05-12",
+      "good": 0,
+      "bad": 2
+    }
+  ]
+}
